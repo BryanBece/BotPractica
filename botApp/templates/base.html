@@ -6,6 +6,8 @@
   <title>{% block title %}{% endblock %}</title>
   {% load static %}
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@12">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@12"></script>
   <noscript><link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" /></noscript>
 </head>
 <body class="is-preload">
@@ -19,5 +21,18 @@
   <script src="{% static 'assets/js/util.js' %}"></script>
   <script src="{% static 'assets/js/main.js' %}"></script>
   {% endblock %}
+
+  {% if messages %}
+  {% for message in messages %}
+  <script>
+    Swal.fire({
+      icon: '{{ message.tags }}',
+      title: '{{ message }}',
+      showConfirmButton: false,
+      timer: 1500
+    })
+  </script>
+  {% endfor %}
+  {% endif %}
 </body>
 </html>
