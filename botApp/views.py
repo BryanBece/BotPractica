@@ -38,7 +38,6 @@ def generar_grafico_lineas_ingresos():
     imagen_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     return imagen_base64
 
-
 def generar_grafico_lineas_genero():
     # Consulta para obtener el conteo de registros por género
     with connection.cursor() as cursor:
@@ -68,7 +67,7 @@ def generar_grafico_lineas_genero():
 def generar_grafico_lineas_ingresos_por_mes():
     # Consulta para obtener el conteo de registros por mes
     with connection.cursor() as cursor:
-        cursor.execute('SELECT strftime(\'%Y-%m\', fecha_ingreso) AS mes, COUNT(*) FROM botApp_formulario GROUP BY mes ORDER BY mes')
+        cursor.execute('SELECT DATE_FORMAT(fecha_ingreso, "%Y-%m") AS mes, COUNT(*) FROM botApp_formulario GROUP BY mes ORDER BY mes')
         resultados = cursor.fetchall()
 
     # Separar los resultados en las listas de eje X y eje Y
