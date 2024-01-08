@@ -1,122 +1,106 @@
-from .forms import *
+from .forms import RespuestaForm
 from .models import *
 from django.contrib.auth.decorators import login_required
-from django.contrib import auth, messages
+from django.contrib import messages, auth
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout
 from django.db import connection
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 
 
-# Create your views here.
+# def generar_grafico_lineas_ingresos():
+#     with connection.cursor() as cursor:
+#         cursor.execute('SELECT COUNT(*), fecha_ingreso FROM botApp_respuesta GROUP BY fecha_ingreso')
+#         resultados = cursor.fetchall()
 
-def generar_grafico_lineas_ingresos():
-    # Consulta para obtener el conteo de registros y las fechas de ingreso
-    with connection.cursor() as cursor:
-        cursor.execute('SELECT COUNT(*), fecha_ingreso FROM botApp_formulario GROUP BY fecha_ingreso')
-        resultados = cursor.fetchall()
+#     categorias = [str(result[1].strftime('%d/%m/%Y')) for result in resultados]
+#     valores = [result[0] for result in resultados]
 
-    # Separar los resultados en las listas de eje X y eje Y
-    categorias = [str(result[1].strftime('%d/%m/%Y')) for result in resultados]
-    valores = [result[0] for result in resultados]
+#     plt.plot(categorias, valores, marker='o', linestyle='-', color='blue')
+#     plt.xlabel('Fechas de Ingreso')
+#     plt.ylabel('Número de Registros')
+#     plt.title('Gráfico de Líneas')
 
-    # Crear el gráfico de líneas
-    plt.plot(categorias, valores, marker='o', linestyle='-', color='blue')
-    plt.xlabel('Fechas de Ingreso')
-    plt.ylabel('Número de Registros')
-    plt.title('Gráfico de Líneas')
+#     buffer = BytesIO()
+#     plt.savefig(buffer, format='png')
+#     buffer.seek(0)
+#     plt.close()
 
-    # Convertir el gráfico a bytes
-    buffer = BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    plt.close()
+#     imagen_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+#     return imagen_base64
 
-    # Convertir a base64 para incrustar en la plantilla HTML
-    imagen_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-    return imagen_base64
 
-def generar_grafico_lineas_genero():
-    # Consulta para obtener el conteo de registros por género
-    with connection.cursor() as cursor:
-        cursor.execute('SELECT genero, COUNT(*) FROM botApp_formulario GROUP BY genero')
-        resultados = cursor.fetchall()
+# def generar_grafico_lineas_genero():
+#     with connection.cursor() as cursor:
+#         cursor.execute('SELECT genero_id, COUNT(*) FROM botApp_respuesta GROUP BY genero_id')
+#         resultados = cursor.fetchall()
 
-    # Separar los resultados en las listas de eje X y eje Y
-    generos = [result[0] for result in resultados]
-    cantidades = [result[1] for result in resultados]
+#     generos = [Genero.objects.get(id=result[0]).nombre for result in resultados]
+#     cantidades = [result[1] for result in resultados]
 
-    # Crear el gráfico de líneas
-    plt.plot(generos, cantidades, marker='o', linestyle='-', color='green')
-    plt.xlabel('Género')
-    plt.ylabel('Número de Registros')
-    plt.title('Gráfico de Líneas por Género')
+#     plt.plot(generos, cantidades, marker='o', linestyle='-', color='green')
+#     plt.xlabel('Género')
+#     plt.ylabel('Número de Registros')
+#     plt.title('Gráfico de Líneas por Género')
 
-    # Convertir el gráfico a bytes
-    buffer = BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    plt.close()
+#     buffer = BytesIO()
+#     plt.savefig(buffer, format='png')
+#     buffer.seek(0)
+#     plt.close()
 
-    # Convertir a base64 para incrustar en la plantilla HTML
-    imagen_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-    return imagen_base64
+#     imagen_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+#     return imagen_base64
 
-def generar_grafico_lineas_ingresos_por_mes():
-    # Consulta para obtener el conteo de registros por mes
-    with connection.cursor() as cursor:
-        cursor.execute('SELECT DATE_FORMAT(fecha_ingreso, "%Y-%m") AS mes, COUNT(*) FROM botApp_formulario GROUP BY mes ORDER BY mes')
-        resultados = cursor.fetchall()
 
-    # Separar los resultados en las listas de eje X y eje Y
-    meses = [result[0] for result in resultados]
-    cantidades = [result[1] for result in resultados]
+# def generar_grafico_lineas_ingresos_por_mes():
+#     with connection.cursor() as cursor:
+#         cursor.execute('SELECT DATE_FORMAT(fecha_ingreso, "%Y-%m") AS mes, COUNT(*) FROM botApp_respuesta GROUP BY mes ORDER BY mes')
+#         resultados = cursor.fetchall()
 
-    # Crear el gráfico de líneas
-    plt.plot(meses, cantidades, marker='o', linestyle='-', color='purple')
-    plt.xlabel('Mes')
-    plt.ylabel('Número de Ingresos')
-    plt.title('Ingresos por Mes')
+#     meses = [result[0] for result in resultados]
+#     cantidades = [result[1] for result in resultados]
 
-    # Convertir el gráfico a bytes
-    buffer = BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    plt.close()
+#     plt.plot(meses, cantidades, marker='o', linestyle='-', color='purple')
+#     plt.xlabel('Mes')
+#     plt.ylabel('Número de Ingresos')
+#     plt.title('Ingresos por Mes')
 
-    # Convertir a base64 para incrustar en la plantilla HTML
-    imagen_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-    return imagen_base64
+#     buffer = BytesIO()
+#     plt.savefig(buffer, format='png')
+#     buffer.seek(0)
+#     plt.close()
 
+#     imagen_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+#     return imagen_base64
 
 
 @login_required
 def home(request):
-    Datos = Formulario.objects.all()
+    Datos = Respuesta.objects.all()
     data = {
-        'form': FormularioForm(),
+        'form': RespuestaForm(),
         'Datos': Datos,
-        'imagen_base64_ingresos': generar_grafico_lineas_ingresos(),
-        'imagen_base64_genero': generar_grafico_lineas_genero(),
-        'imagen_base64_ingresos_por_mes': generar_grafico_lineas_ingresos_por_mes(),
-    
+        #'imagen_base64_ingresos': generar_grafico_lineas_ingresos(),
+        #'imagen_base64_genero': generar_grafico_lineas_genero(),
+        #'imagen_base64_ingresos_por_mes': generar_grafico_lineas_ingresos_por_mes(),
     }
 
     if request.method == 'POST':
-        form = FormularioForm(request.POST)
+        form = RespuestaForm(request.POST)
 
         if form.is_valid():
-            form.instance.usuario = request.user.username
+            form.instance.id_usuario = request.user.id
             form.save()
             messages.success(request, 'Datos guardados correctamente')
-            form = FormularioForm()  
+            form = RespuestaForm()
         else:
+            print(form.errors)
             messages.error(request, 'La persona debe tener más de 18 años y haber nacido después de 1930.')
-            form = FormularioForm()  
+            form = RespuestaForm()
 
     return render(request, 'home.html', data)
+
 
 def login(request):
     if request.method == 'POST':
@@ -132,6 +116,3 @@ def login(request):
             return render(request, 'registration/login.html') 
 
     return render(request, 'registration/login.html')
-
-
-

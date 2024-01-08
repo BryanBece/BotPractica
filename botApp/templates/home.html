@@ -34,33 +34,30 @@
 	<div id="main">
 
 		<!-- Formulario -->
-		<article id="formulario">
-			<h2 class="major">Formulario</h2>
-			<form action="" method="POST">
-				{% csrf_token %}
-				<!-- Año de nacimiento -->
-				<label for="anioNacimiento" style="display: inline-block;
-				width: 250px;
-				text-align: right;
-				margin-right: 10px;">Año de nacimiento:</label>
-				<input type="date" name="anioNacimiento" style="background-color: #333;
-				color: #fff; display: inline-block;
-				width: 200px;" id="anioNacimiento" placeholder="Ingrese año de nacimiento" required>
-				<!-- Comuna -->
-				<div>
-				<input type="text" name="comuna" id="comuna" placeholder="Comuna" required>
-				</div>
-				<!-- Género -->
-				<select name="genero" id="genero" required>
-					<option value="" disabled selected>Selecciona tu género</option>
-					<option value="Masculino">Masculino</option>a
-					<option value="Femenino">Femenino</option>
-				</select>
-				<br>
-				<!-- Botón de enviar -->
-				<button type="submit">Enviar</button>
-			</form>
-		</article>
+<article id="formulario">
+    <h2 class="major">Formulario</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <!-- Año de nacimiento -->
+        <label for="id_anioNacimiento" style="display: inline-block;
+				width: 200px;">Año de nacimiento:</label>
+        {{ form.anioNacimiento }}
+        <!-- Comuna -->
+        <div>
+			<label for="id_comuna" style="display: inline-block;
+				width: 200px;">Comuna:</label>
+            {{ form.comuna }}
+        </div>
+        <!-- Género -->
+		<label for="id_genero" style="display: inline-block;
+				width: 200px;">Género:</label>
+        {{ form.genero }}
+        <br>
+        <!-- Botón de enviar -->
+        <button type="submit">Enviar</button>
+    </form>
+</article>
+
 
 		<!-- Datos -->
 		<article id="datos">
@@ -71,7 +68,7 @@
 				<thead>
 					<tr>
 						<th>Fecha ingreso</th>
-						<th>Usuario</th>
+						<th>ID_Usuario</th>
 						<th>Año de nacimiento</th>
 						<th>Comuna</th>
 						<th>Género</th>
@@ -81,7 +78,7 @@
 					{% for dato in Datos %}
 					<tr>
 						<td>{{ dato.fecha_ingreso|date:"d-m-Y" }}</td>
-						<td>{{ dato.usuario }}</td>
+						<td>{{ dato.id_usuario }}</td>
 						<td>{{ dato.anioNacimiento|date:"d-m-Y" }}</td>
 						<td>{{ dato.comuna }}</td>
 						<td>{{ dato.genero }}</td>
@@ -115,6 +112,15 @@
 
 <!-- BG -->
 <div id="bg"></div>
+
+<style>
+	.dark-input {
+		background-color: #333;
+		color: #fff;
+		
+	}
+	
+</style>
 
 {% endblock %}
 </body>
