@@ -36,26 +36,41 @@
 		<!-- Formulario -->
 <article id="formulario">
     <h2 class="major">Formulario</h2>
-    <form action="" method="POST">
-        {% csrf_token %}
-        <!-- Año de nacimiento -->
-        <label for="id_anioNacimiento" style="display: inline-block;
-				width: 200px;">Año de nacimiento:</label>
-        {{ form.anioNacimiento }}
-        <!-- Comuna -->
-        <div>
-			<label for="id_comuna" style="display: inline-block;
-				width: 200px;">Comuna:</label>
-            {{ form.comuna }}
-        </div>
-        <!-- Género -->
-		<label for="id_genero" style="display: inline-block;
-				width: 200px;">Género:</label>
-        {{ form.genero }}
-        <br>
-        <!-- Botón de enviar -->
-        <button type="submit">Enviar</button>
-    </form>
+	<form action="" method="POST">
+		{% csrf_token %}
+	
+		<!-- Año de nacimiento -->
+		<label for="{{ form.anioNacimiento.id_for_label }}" style="display: inline-block; width: 200px;">Año de nacimiento:</label>
+		{{ form.anioNacimiento }}
+	
+		<!-- Comuna -->
+		<div>
+			<label for="id_comuna" style="display: inline-block; width: 200px;">Comuna:</label>
+			{{ form.Comuna_Usuario }}
+		</div>
+	
+		<!-- Género -->
+		<label for="id_genero" style="display: inline-block; width: 200px;">Género:</label>
+		{{ form.Genero_Usuario }}
+	
+		<!-- Sistema de Salud -->
+		<div>
+			<label for="{{ form.SistemaSalud_Usuario.id_for_label }}" style="display: inline-block; width: 200px;">Sistema de Salud:</label>
+			{{ form.SistemaSalud_Usuario }}
+		</div>
+	
+		<!-- Ocupación -->
+		<label for="{{ form.Ocupacion_Usuario.id_for_label }}" style="display: inline-block; width: 200px;">Ocupación:</label>
+		{{ form.Ocupacion_Usuario }}
+	
+		<br>
+		<!-- Botón de enviar -->
+		<button type="submit">Enviar</button>
+	</form>
+	
+	
+	
+	
 </article>
 
 
