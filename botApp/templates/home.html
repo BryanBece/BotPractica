@@ -76,27 +76,29 @@
 
 		<!-- Datos -->
 		<article id="datos">
-			<h2 class="major">Datos ingresados</h2>
+			<h2 class="major">Usuarios</h2>
 
 			{% if Datos %}
 			<table>
 				<thead>
 					<tr>
-						<th>Fecha ingreso</th>
 						<th>ID_Usuario</th>
 						<th>Año de nacimiento</th>
 						<th>Comuna</th>
 						<th>Género</th>
+						<th>Sistema de Salud</th>
+						<th>Ocupación</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for dato in Datos %}
 					<tr>
-						<td>{{ dato.fecha_ingreso|date:"d-m-Y" }}</td>
 						<td>{{ dato.id_usuario }}</td>
 						<td>{{ dato.anioNacimiento|date:"d-m-Y" }}</td>
-						<td>{{ dato.comuna }}</td>
-						<td>{{ dato.genero }}</td>
+						<td>{{ dato.Comuna_Usuario }}</td>
+						<td>{{ dato.Genero_Usuario }}</td>
+						<td>{{ dato.SistemaSalud_Usuario }}</td>
+						<td>{{ dato.Ocupacion_Usuario }}</td>
 					</tr>
 				{% endfor %}
 				
@@ -111,8 +113,6 @@
 		<article id="reportes">
 			<h2 class="major">Reportes</h2>
 			<img class="img-fluid" src="data:image/png;base64,{{ imagen_base64_ingresos }}" alt="Gráfico de Barras">
-			<img class="img-fluid" src="data:image/png;base64,{{ imagen_base64_genero }}" alt="Gráfico de Barras">
-			<img class="img-fluid" src="data:image/png;base64,{{ imagen_base64_ingresos_por_mes }}" alt="Gráfico de Barras">
 		</article>
 
 
