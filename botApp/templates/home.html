@@ -24,6 +24,7 @@
 				<li><a href="{% url 'reportes' %}">Reportes</a></li>
 			</ul>
 		</nav>
+		<a href="{% url 'preguntas' %}"><button>Preguntas</button></a>
 		<form method="post" action="{% url 'logout' %}">
 			{% csrf_token %}
 			<button type="submit">Cerrar Sesión</button>
@@ -40,12 +41,4 @@
 
 <!-- BG -->
 <div id="bg"></div>
-
-
 {% endblock %}
-</body>
-
-
-
-
-</html>

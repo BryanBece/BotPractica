@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Preguntas{% endblock %}
+
+{% block content %}
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <div class="logo">
+            <span class="fas fa-question"></span>
+        </div>
+        <div class="content">
+            <div class="inner">
+                <h1>Preguntas</h1>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'listarPreguntas' %}">Lista de Preguntas</a></li>
+                <li><a href="{% url 'crearPregunta' %}">Crear Pregunta</a></li>
+            </ul>
+        </nav>
+        <button type="button" onclick="location.href='{% url 'home' %}'">Volver</button>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Cerrar Sesión</button>
+        </form>
+    </header>
+
+
+    	<!-- Footer -->
+	<footer id="footer">
+		<p class="copyright">&copy; Untitled.</p>
+	</footer>
+
+</div>
+
+<!-- BG -->
+<div id="bg"></div>
+{% endblock %}
+</body>
+</html>

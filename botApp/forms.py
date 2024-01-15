@@ -47,3 +47,8 @@ class UsuarioForm(forms.ModelForm):
             ocupacion, created = Ocupacion.objects.get_or_create(OPC_Ocupacion=ocupacion_value)
             return ocupacion
         return None
+
+class PreguntaForm(forms.ModelForm):
+    class Meta:
+        model = Pregunta
+        fields = ['pregunta']

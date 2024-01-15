@@ -52,6 +52,7 @@ def login(request):
     return render(request, 'registration/login.html')
 
 #Base de datos
+@login_required
 def database(request):
     Datos = Usuario.objects.all()
     data = {
@@ -60,6 +61,7 @@ def database(request):
     return render(request, 'database.html', data)
 
 #Reportes
+@login_required
 def reportes(request):
     data = {
         'imagen_base64_ingresos': generar_grafico_lineas_ingresos(),
@@ -67,6 +69,7 @@ def reportes(request):
     return render(request, 'reportes.html', data)
 
 #Formulario
+@login_required
 def formulario(request):
     data = {
         'form': UsuarioForm(),
@@ -89,4 +92,59 @@ def formulario(request):
 
     return render(request, 'formulario.html', data)  
 
-    
+# --------------------- Preguntas --------------------- #
+@login_required
+def preguntasHome(request):
+    return render(request, 'preguntas/preguntasHome.html')
+
+#Listar Preguntas
+@login_required
+def listarPreguntas(request):
+    Preguntas = Pregunta.objects.all()
+    data = {
+        'preguntas': Preguntas,
+    }
+    return render(request, 'preguntas/listarPreguntas.html', data)
+
+#Modificar Pregunta
+@login_required
+def modificarPregunta(request, id):
+    Preguntas = Pregunta.objects.get(id=id)
+    data = {
+        'form': PreguntaForm(instance=Preguntas)
+    }
+
+    if request.method == 'POST':
+        formulario = PreguntaForm(data=request.POST, instance=Preguntas, files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Modificado Correctamente")
+            return redirect(to="listarPreguntas")
+        data["form"] = formulario
+
+    return render(request, 'preguntas/modificarPreguntas.html', data)
+
+#Eliminar Pregunta
+@login_required
+def eliminarPregunta(request, id):
+    Preguntas = Pregunta.objects.get(id=id)
+    Preguntas.delete()
+    messages.success(request, "Eliminado Correctamente")
+    return redirect(to="listarPreguntas")
+
+#Crear Pregunta
+@login_required
+def crearPregunta(request):
+    data = {
+        'form': PreguntaForm()
+    }
+
+    if request.method == 'POST':
+        formulario = PreguntaForm(data=request.POST, files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Pregunta Creada Correctamente")
+        else:
+            data["form"] = formulario
+
+    return render(request, 'preguntas/crearPreguntas.html', data)
