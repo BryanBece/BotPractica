@@ -34,11 +34,42 @@ def generar_grafico_lineas_ingresos():
 
 @login_required
 def home(request):
+    return render(request, 'home.html')
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect('home')  
+        else:
+            return render(request, 'registration/login.html') 
+
+    return render(request, 'registration/login.html')
+
+#Base de datos
+def database(request):
     Datos = Usuario.objects.all()
     data = {
-        'form': UsuarioForm(),
         'Datos': Datos,
+    }
+    return render(request, 'database.html', data)
+
+#Reportes
+def reportes(request):
+    data = {
         'imagen_base64_ingresos': generar_grafico_lineas_ingresos(),
+    }
+    return render(request, 'reportes.html', data)
+
+#Formulario
+def formulario(request):
+    data = {
+        'form': UsuarioForm(),
     }
 
     if request.method == 'POST':
@@ -56,20 +87,6 @@ def home(request):
             messages.error(request, 'La persona debe tener más de 18 años y haber nacido después de 1930.')
             form = UsuarioForm()
 
-    return render(request, 'home.html', data)
+    return render(request, 'formulario.html', data)  
 
-
-def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = auth.authenticate(username=username, password=password)
-
-        if user is not None:
-            auth.login(request, user)
-            return redirect('home')  
-        else:
-            return render(request, 'registration/login.html') 
-
-    return render(request, 'registration/login.html')
+    

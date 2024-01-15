@@ -71,6 +71,7 @@ class Usuario(models.Model):
     Genero_Usuario = models.ForeignKey(Genero, on_delete=models.PROTECT)
     SistemaSalud_Usuario = models.ForeignKey(SistemaSalud, on_delete=models.PROTECT)
     Ocupacion_Usuario = models.ForeignKey(Ocupacion, on_delete=models.PROTECT)
+    Fecha_Ingreso = models.DateField(default=timezone.now)
 
     def __str__(self):
         return f'{self.id_usuario} - {self.anioNacimiento}'

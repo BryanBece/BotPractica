@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Reportes{% endblock %}
+
+{% block content %}
+
+<section id="reportes">
+    <h2 class="major">Reportes</h2>
+    <div class="chart-container">
+        <img class="chart-image" src="data:image/png;base64,{{ imagen_base64_ingresos }}" alt="Gráfico de Barras">
+    </div>
+    <a class="button" href="{% url 'home' %}">Volver</a>
+</section>
+
+<style>
+    .chart-container {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    section#reportes {
+        text-align: center;
+    }
+</style>
+
+{% endblock %}

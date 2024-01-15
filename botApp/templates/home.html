@@ -19,9 +19,9 @@
 		</div>
 		<nav>
 			<ul>
-				<li><a href="#formulario">Formulario</a></li>
-				<li><a href="#datos">Base de datos</a></li>
-				<li><a href="#reportes">Reportes</a></li>
+				<li><a href="{% url 'formulario' %}">Formulario</a></li>
+				<li><a href="{% url 'database' %}">Base de datos</a></li>
+				<li><a href="{% url 'reportes' %}">Reportes</a></li>
 			</ul>
 		</nav>
 		<form method="post" action="{% url 'logout' %}">
@@ -30,93 +30,6 @@
 		</form>
 	</header>
 
-	<!-- Main -->
-	<div id="main">
-
-		<!-- Formulario -->
-<article id="formulario">
-    <h2 class="major">Formulario</h2>
-	<form action="" method="POST">
-		{% csrf_token %}
-	
-		<!-- Año de nacimiento -->
-		<label for="{{ form.anioNacimiento.id_for_label }}" style="display: inline-block; width: 200px;">Año de nacimiento:</label>
-		{{ form.anioNacimiento }}
-	
-		<!-- Comuna -->
-		<div>
-			<label for="id_comuna" style="display: inline-block; width: 200px;">Comuna:</label>
-			{{ form.Comuna_Usuario }}
-		</div>
-	
-		<!-- Género -->
-		<label for="id_genero" style="display: inline-block; width: 200px;">Género:</label>
-		{{ form.Genero_Usuario }}
-	
-		<!-- Sistema de Salud -->
-		<div>
-			<label for="{{ form.SistemaSalud_Usuario.id_for_label }}" style="display: inline-block; width: 200px;">Sistema de Salud:</label>
-			{{ form.SistemaSalud_Usuario }}
-		</div>
-	
-		<!-- Ocupación -->
-		<label for="{{ form.Ocupacion_Usuario.id_for_label }}" style="display: inline-block; width: 200px;">Ocupación:</label>
-		{{ form.Ocupacion_Usuario }}
-	
-		<br>
-		<!-- Botón de enviar -->
-		<button type="submit">Enviar</button>
-	</form>
-	
-	
-	
-	
-</article>
-
-
-		<!-- Datos -->
-		<article id="datos">
-			<h2 class="major">Usuarios</h2>
-
-			{% if Datos %}
-			<table>
-				<thead>
-					<tr>
-						<th>ID_Usuario</th>
-						<th>Año de nacimiento</th>
-						<th>Comuna</th>
-						<th>Género</th>
-						<th>Sistema de Salud</th>
-						<th>Ocupación</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for dato in Datos %}
-					<tr>
-						<td>{{ dato.id_usuario }}</td>
-						<td>{{ dato.anioNacimiento|date:"d-m-Y" }}</td>
-						<td>{{ dato.Comuna_Usuario }}</td>
-						<td>{{ dato.Genero_Usuario }}</td>
-						<td>{{ dato.SistemaSalud_Usuario }}</td>
-						<td>{{ dato.Ocupacion_Usuario }}</td>
-					</tr>
-				{% endfor %}
-				
-				</tbody>
-			</table>
-			{% else %}
-			<p>No hay datos ingresados</p>
-			{% endif %}
-		</article>
-
-		<!-- Gráfico -->
-		<article id="reportes">
-			<h2 class="major">Reportes</h2>
-			<img class="img-fluid" src="data:image/png;base64,{{ imagen_base64_ingresos }}" alt="Gráfico de Barras">
-		</article>
-
-
-	</div>
 
 	<!-- Footer -->
 	<footer id="footer">
@@ -128,14 +41,6 @@
 <!-- BG -->
 <div id="bg"></div>
 
-<style>
-	.dark-input {
-		background-color: #333;
-		color: #fff;
-		
-	}
-	
-</style>
 
 {% endblock %}
 </body>

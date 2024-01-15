@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Base de Datos{% endblock %}
+
+{% block content %}
+
+<section id="usuarios">
+    <h2 class="major">Usuarios</h2>
+
+    {% if Datos %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID_Usuario</th>
+                    <th>Año de nacimiento</th>
+                    <th>Comuna</th>
+                    <th>Género</th>
+                    <th>Sistema de Salud</th>
+                    <th>Ocupación</th>
+                    <th>Fecha de ingreso</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dato in Datos %}
+                <tr>
+                    <td>{{ dato.id_usuario }}</td>
+                    <td>{{ dato.anioNacimiento|date:"d-m-Y" }}</td>
+                    <td>{{ dato.Comuna_Usuario }}</td>
+                    <td>{{ dato.Genero_Usuario }}</td>
+                    <td>{{ dato.SistemaSalud_Usuario }}</td>
+                    <td>{{ dato.Ocupacion_Usuario }}</td>
+                    <td>{{ dato.Fecha_Ingreso|date:"d-m-Y" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No hay datos ingresados</p>
+    {% endif %}
+
+    <a class="button" href="{% url 'home' %}">Volver</a>
+</section>
+
+{% endblock %}
