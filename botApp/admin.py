@@ -16,7 +16,13 @@ class PreguntaAdmin(admin.ModelAdmin):
     search_fields = ('id', 'pregunta')
     list_filter = ('id', 'pregunta')
 
+class RespuestaUsuarioAdmin(admin.ModelAdmin):
+    list_display = ('id', 'id_usuario', 'id_pregunta', 'id_opc_respuesta', 'fecha_respuesta')
+    search_fields = ('id', 'id_usuario', 'id_pregunta', 'id_opc_respuesta', 'fecha_respuesta')
+    list_filter = ('id', 'id_usuario', 'id_pregunta', 'id_opc_respuesta', 'fecha_respuesta')
+
 
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Pregunta, PreguntaAdmin)
+admin.site.register(RespuestaUsuario, RespuestaUsuarioAdmin)
 
