@@ -51,10 +51,10 @@ def login(request):
 
     return render(request, 'registration/login.html')
 
-#Base de datos
+# Base de datos
 @login_required
 def database(request):
-    Datos = Usuario.objects.all()
+    Datos = Usuario.objects.all().order_by('-Fecha_Ingreso')  
     data = {
         'Datos': Datos,
     }
@@ -68,29 +68,35 @@ def reportes(request):
     }
     return render(request, 'reportes.html', data)
 
-#Formulario
 @login_required
 def formulario(request):
     data = {
-        'form': UsuarioForm(),
+        'formUsuario': UsuarioForm(),
+        'preguntas': Pregunta.objects.all(),
     }
 
     if request.method == 'POST':
-        form = UsuarioForm(request.POST)
+        form_usuario = UsuarioForm(request.POST)
 
-        if form.is_valid():
-            form.instance.id_usuario = request.user.id
-            form.save()
-            print(form.cleaned_data)
+        if form_usuario.is_valid():
+            form_usuario.instance.id_usuario = request.user.id
+            usuario = form_usuario.save()
+
+            for pregunta in data['preguntas']:
+                respuesta = request.POST.get(f'pregunta_{pregunta.id}')
+                opc_respuesta = OPC_Respuesta(id_pregunta=pregunta, OPC_Respuesta=respuesta)
+                opc_respuesta.save()
+
             messages.success(request, 'Datos guardados correctamente')
-            form = UsuarioForm()
-            
-        else:
-            print(form.errors)
-            messages.error(request, 'La persona debe tener más de 18 años y haber nacido después de 1930.')
-            form = UsuarioForm()
+            form_usuario = UsuarioForm()
 
-    return render(request, 'formulario.html', data)  
+        else:
+            print(form_usuario.errors)
+            messages.error(request, 'La persona debe tener más de 18 años y haber nacido después de 1930.')
+            form_usuario = UsuarioForm()
+
+    return render(request, 'formulario.html', data)
+
 
 # --------------------- Preguntas --------------------- #
 @login_required
