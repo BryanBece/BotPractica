@@ -91,9 +91,9 @@ class OPC_Respuesta(models.Model):
 
 class RespuestaUsuario(models.Model):
     id_usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT)
-    id_pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
-    id_opc_respuesta = models.ForeignKey(OPC_Respuesta, on_delete=models.CASCADE)
-    fecha_respuesta = models.DateField(auto_now_add=True)
+    id_pregunta = models.ForeignKey(Pregunta, on_delete=models.PROTECT)
+    id_opc_respuesta = models.ForeignKey(OPC_Respuesta, on_delete=models.PROTECT)
+    fecha_respuesta = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.id_usuario} - {self.id_pregunta} - {self.id_opc_respuesta}'

@@ -68,6 +68,7 @@ def reportes(request):
     }
     return render(request, 'reportes.html', data)
 
+#Formulario
 @login_required
 def formulario(request):
     data = {
@@ -86,9 +87,12 @@ def formulario(request):
                 respuesta = request.POST.get(f'pregunta_{pregunta.id}')
                 opc_respuesta = OPC_Respuesta(id_pregunta=pregunta, OPC_Respuesta=respuesta)
                 opc_respuesta.save()
+                respuesta_usuario = RespuestaUsuario(id_usuario=usuario, id_pregunta=pregunta, id_opc_respuesta=opc_respuesta)
+                respuesta_usuario.save()
 
             messages.success(request, 'Datos guardados correctamente')
             form_usuario = UsuarioForm()
+            return redirect(to='home')
 
         else:
             print(form_usuario.errors)
