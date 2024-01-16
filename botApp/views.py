@@ -7,20 +7,27 @@ from django.db import connection
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+from datetime import datetime
+from django.contrib.auth.models import User
 
 
-def generar_grafico_lineas_ingresos():
+def generar_grafico_respuestas_por_dia():
     with connection.cursor() as cursor:
-        cursor.execute('SELECT COUNT(*) FROM botApp_usuario')
-        total_usuarios = cursor.fetchone()[0]
+        cursor.execute('SELECT DATE(fecha_respuesta), COUNT(*) FROM botApp_respuestausuario GROUP BY DATE(fecha_respuesta)')
+        resultados = cursor.fetchall()
 
-    categorias = ['Total Usuarios']
-    valores = [total_usuarios]
+    fechas = []
+    cantidades = []
 
-    plt.plot(categorias, valores, marker='o', linestyle='-', color='blue')
-    plt.xlabel('Categorías')
-    plt.ylabel('Número de Usuarios')
-    plt.title('Gráfico de Líneas')
+    for resultado in resultados:
+        fecha, cantidad = resultado
+        fechas.append(datetime.strftime(fecha, '%Y-%m-%d'))
+        cantidades.append(cantidad)
+
+    plt.plot(fechas, cantidades, marker='o', linestyle='-', color='blue')
+    plt.xlabel('Fecha de Respuesta')
+    plt.ylabel('Número de Respuestas')
+    plt.title('Respuestas por Día')
 
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
@@ -64,23 +71,25 @@ def database(request):
 @login_required
 def reportes(request):
     data = {
-        'imagen_base64_ingresos': generar_grafico_lineas_ingresos(),
+        'imagen_base64_ingresos': generar_grafico_respuestas_por_dia(),
     }
     return render(request, 'reportes.html', data)
 
 #Formulario
 @login_required
 def formulario(request):
+    
     data = {
         'formUsuario': UsuarioForm(),
         'preguntas': Pregunta.objects.all(),
+        'usuarios' : User.objects.all()
     }
 
     if request.method == 'POST':
         form_usuario = UsuarioForm(request.POST)
 
         if form_usuario.is_valid():
-            form_usuario.instance.id_usuario = request.user.id
+            form_usuario.instance.id_usuario = request.POST.get('id_usuario')
             usuario = form_usuario.save()
 
             for pregunta in data['preguntas']:

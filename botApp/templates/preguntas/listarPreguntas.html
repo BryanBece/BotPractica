@@ -30,7 +30,11 @@
     {% else %}
       <p>No hay preguntas ingresadas</p>
     {% endif %}
-    <a class="button" href="{% url 'preguntas' %}">Volver</a>
+    
+    <div class="button-container">
+      <a class="button" href="{% url 'preguntas' %}">Volver</a>
+      <a class="button" id="buttonCreate" href="{% url 'crearPregunta' %}">Crear Pregunta</a>
+    </div>
   </div>
 
   <script>
@@ -52,4 +56,12 @@
     }
   </script>
 
+  <style>
+    #buttonCreate {
+      margin-left: 20px;
+    }
+  </style>
+
 {% endblock %}
+
+

@@ -18,9 +18,9 @@ class Genero(models.Model):
     OTRO = 'Otro'
 
     GENERO_CHOICES = [
-        ('1', FEMENINO),
-        ('2', MASCULINO),
-        ('3', OTRO),
+        (FEMENINO, 'Femenino'),
+        (MASCULINO, 'Masculino'),
+        (OTRO, 'Otro'),
     ]
 
     OPC_Genero = models.CharField(max_length=50, choices=GENERO_CHOICES)
@@ -34,9 +34,9 @@ class SistemaSalud(models.Model):
     OTRO = 'Otro'
 
     SISTEMA_SALUD_CHOICES = [
-        ('1', FONASA),
-        ('2', ISAPRE),
-        ('3', OTRO),
+        (FONASA, 'Fonasa'),
+        (ISAPRE, 'Isapre'),
+        (OTRO, 'Otro'),
     ]
 
     OPC_SistemaSalud = models.CharField(max_length=50, choices=SISTEMA_SALUD_CHOICES)
@@ -51,16 +51,17 @@ class Ocupacion(models.Model):
     OTRO = 'Otro'
 
     OCUPACION_CHOICES = [
-        ('1', DUENIACASA),
-        ('2', TRABAJADOR),
-        ('3', DESEMPLEADO),
-        ('4', OTRO),
+        (DUENIACASA, 'Dueña de Casa'),
+        (TRABAJADOR, 'Trabajadora'),
+        (DESEMPLEADO, 'Desempleada'),
+        (OTRO, 'Otro'),
     ]
 
     OPC_Ocupacion = models.CharField(max_length=50, choices=OCUPACION_CHOICES)
 
     def __str__(self):
         return self.OPC_Ocupacion
+
 
 class Usuario(models.Model):
     anioNacimiento = models.DateField(

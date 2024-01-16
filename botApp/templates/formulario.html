@@ -12,6 +12,17 @@
 
         <!-- Formulario 1-->
 
+        <!-- Seleccion ID usuarios -->
+        <div class="form-group">
+            <label for="id_usuario">Seleccionar ID de Usuario:</label>
+            <select name="id_usuario" id="id_usuario" class="form-control">
+                {% for usuario in usuarios %}
+                    <option value="{{ usuario.id }}">{{ usuario.id }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
         <!-- Año de nacimiento -->
         <div class="form-group" id="anioNac">
             <label for="{{ form.anioNacimiento.id_for_label }}">Año de nacimiento:</label>
