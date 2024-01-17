@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 
 def generar_grafico_respuestas_por_dia():
     with connection.cursor() as cursor:
-        cursor.execute('SELECT DATE(fecha_respuesta), COUNT(*) FROM botApp_respuestausuario GROUP BY DATE(fecha_respuesta)')
+        cursor.execute('SELECT DATE(Fecha_Ingreso), COUNT(*) FROM botApp_usuario GROUP BY DATE(Fecha_Ingreso)')
         resultados = cursor.fetchall()
 
     fechas = []
