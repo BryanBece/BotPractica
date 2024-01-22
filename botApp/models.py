@@ -106,7 +106,7 @@ class RespuestaUsuario(models.Model):
 
 class Prueba(models.Model):
     id_usuario = models.IntegerField()
-    fechaNacimiento = models.DateField()
+    fechaNacimiento = models.CharField(max_length=200)
 
     def __str__(self):
-        return f"{self.nombre} - {self.apellido} - {self.edad}"
+        return f"{self.id_usuario} - {self.fechaNacimiento}"
