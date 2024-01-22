@@ -107,6 +107,11 @@ class RespuestaUsuario(models.Model):
 class Prueba(models.Model):
     id_usuario = models.IntegerField()
     fechaNacimiento = models.CharField(max_length=200)
+    Comuna_Usuario = models.CharField(max_length=200)
+    Genero_Usuario = models.CharField(max_length=200)
+    SistemaSalud_Usuario = models.CharField(max_length=200)
+    Ocupacion_Usuario = models.CharField(max_length=200)
+    Fecha_Ingreso = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.id_usuario} - {self.fechaNacimiento}"
