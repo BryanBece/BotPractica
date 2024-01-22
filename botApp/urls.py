@@ -1,6 +1,9 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from rest_framework import routers
 
+router = routers.DefaultRouter()
+router.register(r'Prueba', views.PruebaViewSet)
 
 
 urlpatterns = [
@@ -16,5 +19,8 @@ urlpatterns = [
     path('modificarPregunta/<id>/', views.modificarPregunta, name='modificarPregunta'),
     path('eliminarPregunta/<id>/', views.eliminarPregunta, name='eliminarPregunta'),
     path('crearPregunta/', views.crearPregunta, name='crearPregunta'),
+    #Api
+    path('api/v1/', include(router.urls)),
+    
 
 ]

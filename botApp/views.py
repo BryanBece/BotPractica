@@ -9,11 +9,15 @@ from io import BytesIO
 import base64
 from datetime import datetime
 from django.contrib.auth.models import User
+from rest_framework import viewsets
+from .serializer import *
 
 
 def generar_grafico_respuestas_por_dia():
     with connection.cursor() as cursor:
-        cursor.execute('SELECT DATE(Fecha_Ingreso), COUNT(*) FROM botApp_usuario GROUP BY DATE(Fecha_Ingreso)')
+        cursor.execute(
+            "SELECT DATE(Fecha_Ingreso), COUNT(*) FROM botApp_usuario GROUP BY DATE(Fecha_Ingreso)"
+        )
         resultados = cursor.fetchall()
 
     fechas = []
@@ -21,129 +25,143 @@ def generar_grafico_respuestas_por_dia():
 
     for resultado in resultados:
         fecha, cantidad = resultado
-        fechas.append(datetime.strftime(fecha, '%Y-%m-%d'))
+        fechas.append(datetime.strftime(fecha, "%Y-%m-%d"))
         cantidades.append(cantidad)
 
-    plt.plot(fechas, cantidades, marker='o', linestyle='-', color='blue')
-    plt.xlabel('Fecha de Respuesta')
-    plt.ylabel('Número de Respuestas')
-    plt.title('Respuestas por Día')
+    plt.plot(fechas, cantidades, marker="o", linestyle="-", color="blue")
+    plt.xlabel("Fecha de Respuesta")
+    plt.ylabel("Número de Respuestas")
+    plt.title("Respuestas por Día")
 
     buffer = BytesIO()
-    plt.savefig(buffer, format='png')
+    plt.savefig(buffer, format="png")
     buffer.seek(0)
     plt.close()
 
-    imagen_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     return imagen_base64
-
 
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    return render(request, "home.html")
+
 
 def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
 
         user = auth.authenticate(username=username, password=password)
 
         if user is not None:
             auth.login(request, user)
-            return redirect('home')  
+            return redirect("home")
         else:
-            return render(request, 'registration/login.html') 
+            return render(request, "registration/login.html")
 
-    return render(request, 'registration/login.html')
+    return render(request, "registration/login.html")
+
 
 # Base de datos
 @login_required
 def database(request):
-    Datos = Usuario.objects.all().order_by('-Fecha_Ingreso')  
+    Datos = Usuario.objects.all().order_by("-Fecha_Ingreso")
     data = {
-        'Datos': Datos,
+        "Datos": Datos,
     }
-    return render(request, 'database.html', data)
+    return render(request, "database.html", data)
 
-#Reportes
+
+# Reportes
 @login_required
 def reportes(request):
     data = {
-        'imagen_base64_ingresos': generar_grafico_respuestas_por_dia(),
+        "imagen_base64_ingresos": generar_grafico_respuestas_por_dia(),
     }
-    return render(request, 'reportes.html', data)
+    return render(request, "reportes.html", data)
 
-#Formulario
+
+# Formulario
 @login_required
 def formulario(request):
-    
     data = {
-        'formUsuario': UsuarioForm(),
-        'preguntas': Pregunta.objects.all(),
-        'usuarios' : User.objects.all()
+        "formUsuario": UsuarioForm(),
+        "preguntas": Pregunta.objects.all(),
+        "usuarios": User.objects.all(),
     }
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form_usuario = UsuarioForm(request.POST)
 
         if form_usuario.is_valid():
-            form_usuario.instance.id_usuario = request.POST.get('id_usuario')
+            form_usuario.instance.id_usuario = request.POST.get("id_usuario")
             usuario = form_usuario.save()
 
-            for pregunta in data['preguntas']:
-                respuesta = request.POST.get(f'pregunta_{pregunta.id}')
-                opc_respuesta = OPC_Respuesta(id_pregunta=pregunta, OPC_Respuesta=respuesta)
+            for pregunta in data["preguntas"]:
+                respuesta = request.POST.get(f"pregunta_{pregunta.id}")
+                opc_respuesta = OPC_Respuesta(
+                    id_pregunta=pregunta, OPC_Respuesta=respuesta
+                )
                 opc_respuesta.save()
-                respuesta_usuario = RespuestaUsuario(id_usuario=usuario, id_pregunta=pregunta, id_opc_respuesta=opc_respuesta)
+                respuesta_usuario = RespuestaUsuario(
+                    id_usuario=usuario,
+                    id_pregunta=pregunta,
+                    id_opc_respuesta=opc_respuesta,
+                )
                 respuesta_usuario.save()
 
-            messages.success(request, 'Datos guardados correctamente')
+            messages.success(request, "Datos guardados correctamente")
             form_usuario = UsuarioForm()
-            return redirect(to='home')
+            return redirect(to="home")
 
         else:
             print(form_usuario.errors)
-            messages.error(request, 'La persona debe tener más de 18 años y haber nacido después de 1930.')
+            messages.error(
+                request,
+                "La persona debe tener más de 18 años y haber nacido después de 1930.",
+            )
             form_usuario = UsuarioForm()
 
-    return render(request, 'formulario.html', data)
+    return render(request, "formulario.html", data)
 
 
 # --------------------- Preguntas --------------------- #
 @login_required
 def preguntasHome(request):
-    return render(request, 'preguntas/preguntasHome.html')
+    return render(request, "preguntas/preguntasHome.html")
 
-#Listar Preguntas
+
+# Listar Preguntas
 @login_required
 def listarPreguntas(request):
     Preguntas = Pregunta.objects.all()
     data = {
-        'preguntas': Preguntas,
+        "preguntas": Preguntas,
     }
-    return render(request, 'preguntas/listarPreguntas.html', data)
+    return render(request, "preguntas/listarPreguntas.html", data)
 
-#Modificar Pregunta
+
+# Modificar Pregunta
 @login_required
 def modificarPregunta(request, id):
     Preguntas = Pregunta.objects.get(id=id)
-    data = {
-        'form': PreguntaForm(instance=Preguntas)
-    }
+    data = {"form": PreguntaForm(instance=Preguntas)}
 
-    if request.method == 'POST':
-        formulario = PreguntaForm(data=request.POST, instance=Preguntas, files=request.FILES)
+    if request.method == "POST":
+        formulario = PreguntaForm(
+            data=request.POST, instance=Preguntas, files=request.FILES
+        )
         if formulario.is_valid():
             formulario.save()
             messages.success(request, "Modificado Correctamente")
             return redirect(to="listarPreguntas")
         data["form"] = formulario
 
-    return render(request, 'preguntas/modificarPreguntas.html', data)
+    return render(request, "preguntas/modificarPreguntas.html", data)
 
-#Eliminar Pregunta
+
+# Eliminar Pregunta
 @login_required
 def eliminarPregunta(request, id):
     Preguntas = Pregunta.objects.get(id=id)
@@ -151,14 +169,13 @@ def eliminarPregunta(request, id):
     messages.success(request, "Eliminado Correctamente")
     return redirect(to="listarPreguntas")
 
-#Crear Pregunta
+
+# Crear Pregunta
 @login_required
 def crearPregunta(request):
-    data = {
-        'form': PreguntaForm()
-    }
+    data = {"form": PreguntaForm()}
 
-    if request.method == 'POST':
+    if request.method == "POST":
         formulario = PreguntaForm(data=request.POST, files=request.FILES)
         if formulario.is_valid():
             formulario.save()
@@ -166,4 +183,9 @@ def crearPregunta(request):
         else:
             data["form"] = formulario
 
-    return render(request, 'preguntas/crearPreguntas.html', data)
+    return render(request, "preguntas/crearPreguntas.html", data)
+
+
+class PruebaViewSet(viewsets.ModelViewSet):
+    queryset = Prueba.objects.all()
+    serializer_class = PruebaSerializer
