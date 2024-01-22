@@ -186,6 +186,19 @@ def crearPregunta(request):
     return render(request, "preguntas/crearPreguntas.html", data)
 
 
+# --------------------- Api --------------------- #
+
+#Prueba
 class PruebaViewSet(viewsets.ModelViewSet):
     queryset = Prueba.objects.all()
     serializer_class = PruebaSerializer
+    
+#Usuario
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+    
+#RespuestaUsuario
+class RespuestaUsuarioViewSet(viewsets.ModelViewSet):
+    queryset = RespuestaUsuario.objects.all()
+    serializer_class = RespuestaUsuarioSerializer
