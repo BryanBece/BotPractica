@@ -50,13 +50,11 @@ class SistemaSalud(models.Model):
 class Ocupacion(models.Model):
     DUENIACASA = "Dueña de Casa"
     TRABAJADOR = "Trabajadora"
-    DESEMPLEADO = "Desempleada"
     OTRO = "Otro"
 
     OCUPACION_CHOICES = [
         (DUENIACASA, "Dueña de Casa"),
         (TRABAJADOR, "Trabajadora"),
-        (DESEMPLEADO, "Desempleada"),
         (OTRO, "Otro"),
     ]
 
