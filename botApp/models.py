@@ -65,7 +65,7 @@ class Ocupacion(models.Model):
 
 
 class Usuario(models.Model):
-    anioNacimiento = models.DateField(verbose_name="Fecha de Nacimiento")
+    anioNacimiento = models.CharField(max_length=200, verbose_name="Fecha de Nacimiento")
     id_usuario = models.IntegerField()
     Comuna_Usuario = models.ForeignKey(Comuna, on_delete=models.PROTECT)
     Genero_Usuario = models.ForeignKey(Genero, on_delete=models.PROTECT)
@@ -104,7 +104,7 @@ class RespuestaUsuario(models.Model):
 
 class Prueba(models.Model):
     id_usuario = models.IntegerField()
-    fechaNacimiento = models.CharField(max_length=200)
+    anioNacimiento = models.CharField(max_length=200)
     Comuna_Usuario = models.CharField(max_length=200)
     Genero_Usuario = models.CharField(max_length=200)
     SistemaSalud_Usuario = models.CharField(max_length=200)
