@@ -12,7 +12,8 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID_Usuario</th>
+                    <th>ID</th>
+                    <th>ID Manichat</th>
                     <th>Año de nacimiento</th>
                     <th>Comuna</th>
                     <th>Género</th>
@@ -24,8 +25,9 @@
             <tbody>
                 {% for dato in Datos %}
                 <tr>
-                    <td>{{ dato.id_usuario }}</td>
-                    <td>{{ dato.anioNacimiento }}</td>
+                    <td>{{ dato.id }}</td>
+                    <td>{{ dato.id_manychat }}</td>
+                    <td>{{ dato.AnioNacimiento }}</td>
                     <td>{{ dato.Comuna_Usuario }}</td>
                     <td>{{ dato.Genero_Usuario }}</td>
                     <td>{{ dato.SistemaSalud_Usuario }}</td>
