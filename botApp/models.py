@@ -65,16 +65,18 @@ class Ocupacion(models.Model):
 
 
 class Usuario(models.Model):
-    anioNacimiento = models.CharField(max_length=200, verbose_name="Fecha de Nacimiento")
-    id_usuario = models.IntegerField()
-    Comuna_Usuario = models.ForeignKey(Comuna, on_delete=models.PROTECT)
-    Genero_Usuario = models.ForeignKey(Genero, on_delete=models.PROTECT)
-    SistemaSalud_Usuario = models.ForeignKey(SistemaSalud, on_delete=models.PROTECT)
-    Ocupacion_Usuario = models.ForeignKey(Ocupacion, on_delete=models.PROTECT)
+    AnioNacimiento = models.CharField(max_length=200, verbose_name="Fecha de Nacimiento")
+    Id_manychat = models.CharField(max_length=200)
+    Rut = models.CharField(max_length=10)
+    Whatsapp = models.CharField(max_length=200)
+    Comuna_Usuario = models.ForeignKey(Comuna, on_delete=models.CASCADE)
+    Genero_Usuario = models.ForeignKey(Genero, on_delete=models.CASCADE)
+    SistemaSalud_Usuario = models.ForeignKey(SistemaSalud, on_delete=models.CASCADE)
+    Ocupacion_Usuario = models.ForeignKey(Ocupacion, on_delete=models.CASCADE)
     Fecha_Ingreso = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.id_usuario}"
+        return f"{self.id_manychat}"
 
 
 class Pregunta(models.Model):
@@ -93,23 +95,12 @@ class OPC_Respuesta(models.Model):
 
 
 class RespuestaUsuario(models.Model):
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT)
-    id_pregunta = models.ForeignKey(Pregunta, on_delete=models.PROTECT)
-    id_opc_respuesta = models.ForeignKey(OPC_Respuesta, on_delete=models.PROTECT)
+    id_manychat = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
+    id_opc_respuesta = models.ForeignKey(OPC_Respuesta, on_delete=models.CASCADE)
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.id_usuario} - {self.id_pregunta} - {self.id_opc_respuesta}"
+        return f"{self.id_manychat} - {self.id_pregunta} - {self.id_opc_respuesta}"
 
 
-class Prueba(models.Model):
-    id_usuario = models.IntegerField()
-    anioNacimiento = models.CharField(max_length=200)
-    Comuna_Usuario = models.CharField(max_length=200)
-    Genero_Usuario = models.CharField(max_length=200)
-    SistemaSalud_Usuario = models.CharField(max_length=200)
-    Ocupacion_Usuario = models.CharField(max_length=200)
-    Fecha_Ingreso = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return f"{self.id_usuario} - {self.fechaNacimiento}"

@@ -5,8 +5,10 @@ from .models import *
 class UsuarioAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "id_usuario",
-        "anioNacimiento",
+        "Id_manychat",
+        "Rut",
+        "Whatsapp",
+        "AnioNacimiento",
         "Comuna_Usuario",
         "Genero_Usuario",
         "SistemaSalud_Usuario",
@@ -15,8 +17,10 @@ class UsuarioAdmin(admin.ModelAdmin):
     )
     search_fields = (
         "id",
-        "id_usuario",
-        "anioNacimiento",
+        "Id_manychat",
+        "Rut",
+        "Whatsapp",
+        "AnioNacimiento",
         "Comuna_Usuario",
         "Genero_Usuario",
         "SistemaSalud_Usuario",
@@ -25,8 +29,10 @@ class UsuarioAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "id",
-        "id_usuario",
-        "anioNacimiento",
+        "Id_manychat",
+        "Rut",
+        "Whatsapp",
+        "AnioNacimiento",
         "Comuna_Usuario",
         "Genero_Usuario",
         "SistemaSalud_Usuario",
@@ -44,21 +50,21 @@ class PreguntaAdmin(admin.ModelAdmin):
 class RespuestaUsuarioAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "id_usuario",
+        "id_manychat",
         "id_pregunta",
         "id_opc_respuesta",
         "fecha_respuesta",
     )
     search_fields = (
         "id",
-        "id_usuario",
+        "id_manychat",
         "id_pregunta",
         "id_opc_respuesta",
         "fecha_respuesta",
     )
     list_filter = (
         "id",
-        "id_usuario",
+        "id_manychat",
         "id_pregunta",
         "id_opc_respuesta",
         "fecha_respuesta",

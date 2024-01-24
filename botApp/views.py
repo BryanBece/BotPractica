@@ -188,11 +188,6 @@ def crearPregunta(request):
 
 # --------------------- Api --------------------- #
 
-#Prueba
-class PruebaViewSet(viewsets.ModelViewSet):
-    queryset = Prueba.objects.all()
-    serializer_class = PruebaSerializer
-    
 #Usuario
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
