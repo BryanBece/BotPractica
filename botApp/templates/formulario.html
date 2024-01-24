@@ -21,12 +21,23 @@
                 {% endfor %}
             </select>
         </div>
+        
+        <!-- Rut -->
+        <div class="form-group">
+            <label for="{{ form.Rut_Usuario.id_for_label }}">Rut:</label>
+            {{ formUsuario.Rut }}
+        </div>
 
+        <!-- Whatsapp -->
+        <div class="form-group">
+            <label for="{{ form.Whatsapp_Usuario.id_for_label }}">Whatsapp:</label>
+            {{ formUsuario.Whatsapp }}
+        </div>
 
         <!-- Año de nacimiento -->
         <div class="form-group" id="anioNac">
-            <label for="{{ form.anioNacimiento.id_for_label }}">Año de nacimiento:</label>
-            {{ formUsuario.anioNacimiento }}
+            <label for="{{ form.AnioNacimiento.id_for_label }}">Año de nacimiento:</label>
+            {{ formUsuario.AnioNacimiento }}
         </div>
 
         <!-- Comuna -->
