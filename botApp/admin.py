@@ -5,6 +5,7 @@ from .models import *
 class UsuarioAdmin(admin.ModelAdmin):
     list_display = (
         "id",
+        "id_usuario",
         "anioNacimiento",
         "Comuna_Usuario",
         "Genero_Usuario",
@@ -13,6 +14,7 @@ class UsuarioAdmin(admin.ModelAdmin):
     )
     search_fields = (
         "id",
+        "id_usuario",
         "anioNacimiento",
         "Comuna_Usuario",
         "Genero_Usuario",
@@ -21,6 +23,7 @@ class UsuarioAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "id",
+        "id_usuario",
         "anioNacimiento",
         "Comuna_Usuario",
         "Genero_Usuario",
