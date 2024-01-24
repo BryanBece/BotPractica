@@ -103,4 +103,9 @@ class RespuestaUsuario(models.Model):
     def __str__(self):
         return f"{self.id_manychat} - {self.id_pregunta} - {self.id_opc_respuesta}"
 
+class Prueba(models.Model):
+    Nombre = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.Nombre
 
