@@ -66,7 +66,7 @@ class Ocupacion(models.Model):
 
 class Usuario(models.Model):
     AnioNacimiento = models.CharField(max_length=200, verbose_name="Fecha de Nacimiento")
-    Id_manychat = models.CharField(max_length=200)
+    id_manychat = models.CharField(max_length=200)
     Rut = models.CharField(max_length=10)
     Whatsapp = models.CharField(max_length=200)
     Comuna_Usuario = models.ForeignKey(Comuna, on_delete=models.CASCADE)
@@ -95,7 +95,7 @@ class OPC_Respuesta(models.Model):
 
 
 class RespuestaUsuario(models.Model):
-    Id_manychat = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_manychat = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
     id_opc_respuesta = models.ForeignKey(OPC_Respuesta, on_delete=models.CASCADE)
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
