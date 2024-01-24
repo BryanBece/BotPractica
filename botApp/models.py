@@ -95,7 +95,7 @@ class OPC_Respuesta(models.Model):
 
 
 class RespuestaUsuario(models.Model):
-    id_manychat = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    Id_manychat = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
     id_opc_respuesta = models.ForeignKey(OPC_Respuesta, on_delete=models.CASCADE)
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
