@@ -11,6 +11,7 @@ class UsuarioAdmin(admin.ModelAdmin):
         "Genero_Usuario",
         "SistemaSalud_Usuario",
         "Ocupacion_Usuario",
+        "Fecha_Ingreso",
     )
     search_fields = (
         "id",
@@ -20,6 +21,7 @@ class UsuarioAdmin(admin.ModelAdmin):
         "Genero_Usuario",
         "SistemaSalud_Usuario",
         "Ocupacion_Usuario",
+        "Fecha_Ingreso",
     )
     list_filter = (
         "id",
@@ -29,6 +31,7 @@ class UsuarioAdmin(admin.ModelAdmin):
         "Genero_Usuario",
         "SistemaSalud_Usuario",
         "Ocupacion_Usuario",
+        "Fecha_Ingreso",
     )
 
 
