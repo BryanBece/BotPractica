@@ -51,21 +51,18 @@ class UsuarioRespuestaAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "id_manychat",
-        "id_pregunta",
         "id_opc_respuesta",
         "fecha_respuesta",
     )
     search_fields = (
         "id",
         "id_manychat",
-        "id_pregunta",
         "id_opc_respuesta",
         "fecha_respuesta",
     )
     list_filter = (
         "id",
         "id_manychat",
-        "id_pregunta",
         "id_opc_respuesta",
         "fecha_respuesta",
     )
