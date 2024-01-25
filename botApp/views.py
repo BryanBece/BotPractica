@@ -209,6 +209,10 @@ class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
 #Busqueda de usuario por id_manychat
 dato_guardado = None  # Variable para almacenar el dato
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+import requests
+
 @api_view(['POST'])
 def guardar_dato(request):
     global dato_guardado
@@ -218,45 +222,32 @@ def guardar_dato(request):
         dato_guardado = dato_id
         print(f'Dato guardado: {dato_guardado}')
 
-        # Aquí comienza la lógica de la solicitud GET
+        # Lógica de la solicitud GET
         url_api = "https://practicabryanbece.eu.pythonanywhere.com/api/v1/Usuario/"
-        response = requests.get(url_api)
+        try:
+            response = requests.get(url_api)
 
-        # Verifica si la solicitud fue exitosa (código de estado 200)
-        if response.status_code == 200:
-            # Convierte la respuesta a formato JSON
-            data = response.json()
+            # Verifica si la solicitud fue exitosa (código de estado 200)
+            response.raise_for_status()
 
-            usuario_encontrado = None
-            # Itera sobre cada objeto en la lista de usuarios
-            for usuario in data:
-                # Busca el ID en los encabezados
-                if 'id_manychat' in usuario and str(usuario['id_manychat']) == str(dato_guardado):
-                    usuario_encontrado = usuario
-                    break  # Termina la búsqueda si se encuentra en los encabezados
-
-                # Busca el ID en el cuerpo del objeto
-                for key, value in usuario.items():
-                    if key == 'id_manychat' and str(value) == str(dato_guardado):
-                        usuario_encontrado = usuario
-                        break  # Termina la búsqueda si se encuentra en el cuerpo
+            # Busca el usuario con id_manychat en la respuesta JSON
+            usuario_encontrado = next((usuario for usuario in response.json() if 'id_manychat' in usuario and str(usuario['id_manychat']) == str(dato_guardado)), None)
 
             if usuario_encontrado:
                 print("Usuario encontrado:")
                 print(f'id: {usuario_encontrado["id"]}')
+                return Response({'id': usuario_encontrado['id']})
             else:
                 print(f"No se encontró un usuario con id_manychat igual a {dato_guardado}")
+                return Response({'error': f'No se encontró un usuario con id_manychat igual a {dato_guardado}'}, status=404)
 
-        else:
-            print(f"Error en la solicitud GET. Código de estado: {response.status_code}")
-            print(response.text)
-
-        # Aquí termina la lógica de la solicitud GET
-
-        return Response({'message': f'Dato guardado: {dato_guardado}'})
+        except requests.RequestException as e:
+            print(f"Error en la solicitud GET: {e}")
+            return Response({'error': f'Error en la solicitud GET: {e}'}, status=500)
 
     else:
         return Response({'error': 'ID no proporcionado'}, status=400)
+
 
 
 # ----------------------
