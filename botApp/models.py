@@ -81,7 +81,7 @@ class Usuario(models.Model):
     Fecha_Ingreso = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Pregunta(models.Model):
