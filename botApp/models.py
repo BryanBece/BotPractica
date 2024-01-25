@@ -65,6 +65,7 @@ class Ocupacion(models.Model):
 
 
 class Usuario(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name="ID Usuario")
     AnioNacimiento = models.CharField(max_length=200, verbose_name="Fecha de Nacimiento")
     id_manychat = models.CharField(max_length=200)
     Rut = models.CharField(max_length=10)
@@ -76,7 +77,7 @@ class Usuario(models.Model):
     Fecha_Ingreso = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.id_manychat}"
+        return self.id
 
 
 class Pregunta(models.Model):
