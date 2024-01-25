@@ -95,10 +95,10 @@ class PreguntaOpcionRespuesta(models.Model):
         return f"{self.id_pregunta} - {self.OPC_Respuesta}"
 
 class UsuarioRespuesta(models.Model):
-    id_manychat = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_opc_respuesta = models.ForeignKey(PreguntaOpcionRespuesta, on_delete=models.CASCADE)
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.id_manychat} - {self.id_pregunta} - {self.id_opc_respuesta}"
+        return f"{self.id_usuario} - {self.id_opc_respuesta}"
 
