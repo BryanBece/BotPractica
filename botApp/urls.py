@@ -1,6 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework import routers
+from .views import *
 
 router = routers.DefaultRouter()
 router.register(r'Usuario', views.UsuarioViewSet)
@@ -22,6 +23,7 @@ urlpatterns = [
     path('crearPregunta/', views.crearPregunta, name='crearPregunta'),
     #Api
     path('api/v1/', include(router.urls)),
+    path('api/guardar_dato/', guardar_dato, name='guardar_dato'),
     
 
 ]

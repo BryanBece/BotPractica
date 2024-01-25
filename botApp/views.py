@@ -1,15 +1,21 @@
-from .forms import *
-from .models import *
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages, auth
-from django.shortcuts import render, redirect
-from django.db import connection
-import matplotlib.pyplot as plt
+from datetime import datetime
 from io import BytesIO
 import base64
-from datetime import datetime
+import matplotlib.pyplot as plt
+import requests
+
+from django.contrib import auth, messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import connection
+from django.shortcuts import render, redirect
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from rest_framework import viewsets
+
+from .forms import *
+from .models import *
 from .serializer import *
 
 
@@ -197,3 +203,60 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
     queryset = UsuarioRespuesta.objects.all()
     serializer_class = UsuarioRespuestaSerializer
+    
+
+
+#Busqueda de usuario por id_manychat
+dato_guardado = None  # Variable para almacenar el dato
+
+@api_view(['POST'])
+def guardar_dato(request):
+    global dato_guardado
+    dato_id = request.data.get('id', None)
+
+    if dato_id is not None:
+        dato_guardado = dato_id
+        print(f'Dato guardado: {dato_guardado}')
+
+        # Aquí comienza la lógica de la solicitud GET
+        url_api = "https://practicabryanbece.eu.pythonanywhere.com/api/v1/Usuario/"
+        response = requests.get(url_api)
+
+        # Verifica si la solicitud fue exitosa (código de estado 200)
+        if response.status_code == 200:
+            # Convierte la respuesta a formato JSON
+            data = response.json()
+
+            usuario_encontrado = None
+            # Itera sobre cada objeto en la lista de usuarios
+            for usuario in data:
+                # Busca el ID en los encabezados
+                if 'id_manychat' in usuario and str(usuario['id_manychat']) == str(dato_guardado):
+                    usuario_encontrado = usuario
+                    break  # Termina la búsqueda si se encuentra en los encabezados
+
+                # Busca el ID en el cuerpo del objeto
+                for key, value in usuario.items():
+                    if key == 'id_manychat' and str(value) == str(dato_guardado):
+                        usuario_encontrado = usuario
+                        break  # Termina la búsqueda si se encuentra en el cuerpo
+
+            if usuario_encontrado:
+                print("Usuario encontrado:")
+                print(f'id: {usuario_encontrado["id"]}')
+            else:
+                print(f"No se encontró un usuario con id_manychat igual a {dato_guardado}")
+
+        else:
+            print(f"Error en la solicitud GET. Código de estado: {response.status_code}")
+            print(response.text)
+
+        # Aquí termina la lógica de la solicitud GET
+
+        return Response({'message': f'Dato guardado: {dato_guardado}'})
+
+    else:
+        return Response({'error': 'ID no proporcionado'}, status=400)
+
+
+# ----------------------
