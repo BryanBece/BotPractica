@@ -24,6 +24,7 @@ urlpatterns = [
     #Api
     path('api/v1/', include(router.urls)),
     path('api/guardar_dato/', guardar_dato, name='guardar_dato'),
+    path('api/obtener_datos/', obtener_datos, name='obtener_datos'),
     
 
 ]
