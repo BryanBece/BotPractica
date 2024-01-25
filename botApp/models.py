@@ -7,6 +7,7 @@ from django.utils import timezone
 
 
 class Comuna(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name="ID Comuna")
     Nombre_Comuna = models.CharField(max_length=50)
 
     def __str__(self):
@@ -24,6 +25,7 @@ class Genero(models.Model):
         (OTRO, "Otro"),
     ]
 
+    id = models.AutoField(primary_key=True, verbose_name="ID Genero")
     OPC_Genero = models.CharField(max_length=50, choices=GENERO_CHOICES)
 
     def __str__(self):
@@ -41,6 +43,7 @@ class SistemaSalud(models.Model):
         (OTRO, "Otro"),
     ]
 
+    id = models.AutoField(primary_key=True, verbose_name="ID Sistema Salud")
     OPC_SistemaSalud = models.CharField(max_length=50, choices=SISTEMA_SALUD_CHOICES)
 
     def __str__(self):
@@ -58,6 +61,7 @@ class Ocupacion(models.Model):
         (OTRO, "Otro"),
     ]
 
+    id = models.AutoField(primary_key=True, verbose_name="ID Ocupacion")
     OPC_Ocupacion = models.CharField(max_length=50, choices=OCUPACION_CHOICES)
 
     def __str__(self):
@@ -81,6 +85,7 @@ class Usuario(models.Model):
 
 
 class Pregunta(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name="ID Pregunta")
     pregunta = models.CharField(max_length=200)
 
     def __str__(self):
@@ -88,6 +93,7 @@ class Pregunta(models.Model):
 
 
 class PreguntaOpcionRespuesta(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name="ID Opcion Respuesta")
     id_pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
     OPC_Respuesta = models.CharField(max_length=200)
 
@@ -95,6 +101,7 @@ class PreguntaOpcionRespuesta(models.Model):
         return f"{self.id_pregunta} - {self.OPC_Respuesta}"
 
 class UsuarioRespuesta(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name="ID Usuario Respuesta")
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_opc_respuesta = models.ForeignKey(PreguntaOpcionRespuesta, on_delete=models.CASCADE)
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
