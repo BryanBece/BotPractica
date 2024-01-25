@@ -207,22 +207,55 @@ class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
 
 
 #Busqueda de usuario por id_manychat
-dato_guardado = None  # Variable para almacenar el dato
+
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import requests
 
+dato_guardado = None  # Variable para almacenar el dato
+dato_encontrado = None  # Variable para almacenar el dato encontrado
+
+def get_usuario_by_id(id_manychat):
+    url_api = "https://practicabryanbece.eu.pythonanywhere.com/api/v1/Usuario/"
+    try:
+        response = requests.get(url_api)
+
+        # Verifica si la solicitud fue exitosa (código de estado 200)
+        response.raise_for_status()
+
+        # Busca el usuario con id_manychat en la respuesta JSON
+        usuario_encontrado = next((usuario for usuario in response.json() if 'id_manychat' in usuario and str(usuario['id_manychat']) == str(id_manychat)), None)
+
+        if usuario_encontrado:
+            print("Usuario encontrado:")
+            print(f'id: {usuario_encontrado["id"]}')
+            return usuario_encontrado['id']
+        else:
+            print(f"No se encontró un usuario con id_manychat igual a {id_manychat}")
+            return None
+
+    except requests.RequestException as e:
+        print(f"Error en la solicitud GET: {e}")
+        return None
 
 @api_view(['POST'])
 def guardar_dato(request):
-    global dato_guardado
+    global dato_guardado, dato_encontrado
     dato_id = request.data.get('id', None)
 
     if dato_id is not None:
         dato_guardado = dato_id
         print(f'Dato guardado: {dato_guardado}')
-        return Response({'message': f'Dato guardado: {dato_guardado}'})
+
+        # Llama a la función para obtener el dato por id_manychat
+        dato_encontrado = get_usuario_by_id(dato_guardado)
+
+        if dato_encontrado is not None:
+            return Response({'message': f'Dato guardado: {dato_guardado}', 'id': dato_encontrado})
+        else:
+            return Response({'error': f'No se encontró un usuario con id_manychat igual a {dato_guardado}'}, status=404)
+
     else:
         return Response({'error': 'ID no proporcionado'}, status=400)
 
