@@ -86,7 +86,7 @@ class Pregunta(models.Model):
         return self.pregunta
 
 
-class OPC_Respuesta(models.Model):
+class PreguntaOpcionRespuesta(models.Model):
     id_pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
     OPC_Respuesta = models.CharField(max_length=200)
 
@@ -94,10 +94,10 @@ class OPC_Respuesta(models.Model):
         return self.OPC_Respuesta
 
 
-class RespuestaUsuario(models.Model):
+class UsuarioRespuesta(models.Model):
     id_manychat = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
-    id_opc_respuesta = models.ForeignKey(OPC_Respuesta, on_delete=models.CASCADE)
+    id_opc_respuesta = models.ForeignKey(PreguntaOpcionRespuesta, on_delete=models.CASCADE)
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

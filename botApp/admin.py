@@ -47,7 +47,7 @@ class PreguntaAdmin(admin.ModelAdmin):
     list_filter = ("id", "pregunta")
 
 
-class RespuestaUsuarioAdmin(admin.ModelAdmin):
+class UsuarioRespuestaAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "id_manychat",
@@ -71,7 +71,7 @@ class RespuestaUsuarioAdmin(admin.ModelAdmin):
     )
 
 
-class OPC_RespuestaAdmin(admin.ModelAdmin):
+class PreguntaOpcionRespuestaAdmin(admin.ModelAdmin):
     list_display = ("id", "id_pregunta", "OPC_Respuesta")
     search_fields = ("id", "id_pregunta", "OPC_Respuesta")
     list_filter = ("id", "id_pregunta", "OPC_Respuesta")
@@ -103,8 +103,8 @@ class OcupacionAdmin(admin.ModelAdmin):
 
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Pregunta, PreguntaAdmin)
-admin.site.register(RespuestaUsuario, RespuestaUsuarioAdmin)
-admin.site.register(OPC_Respuesta, OPC_RespuestaAdmin)
+admin.site.register(UsuarioRespuesta, UsuarioRespuestaAdmin)
+admin.site.register(PreguntaOpcionRespuesta, PreguntaOpcionRespuestaAdmin)
 admin.site.register(Comuna, ComunaAdmin)
 admin.site.register(Genero, GeneroAdmin)
 admin.site.register(SistemaSalud, SistemaSaludAdmin)

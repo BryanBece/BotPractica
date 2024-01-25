@@ -7,7 +7,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
         model = Usuario
         fields = "__all__"
         
-class RespuestaUsuarioSerializer(serializers.ModelSerializer):
+class UsuarioRespuestaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RespuestaUsuario
+        model = UsuarioRespuesta
         fields = "__all__"

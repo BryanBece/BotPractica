@@ -194,6 +194,6 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
     
 #RespuestaUsuario
-class RespuestaUsuarioViewSet(viewsets.ModelViewSet):
-    queryset = RespuestaUsuario.objects.all()
-    serializer_class = RespuestaUsuarioSerializer
+class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
+    queryset = UsuarioRespuesta.objects.all()
+    serializer_class = UsuarioRespuestaSerializer
