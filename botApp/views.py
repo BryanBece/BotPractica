@@ -213,6 +213,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import requests
 
+
 @api_view(['POST'])
 def guardar_dato(request):
     global dato_guardado
@@ -221,33 +222,9 @@ def guardar_dato(request):
     if dato_id is not None:
         dato_guardado = dato_id
         print(f'Dato guardado: {dato_guardado}')
-
-        # Lógica de la solicitud GET
-        url_api = "https://practicabryanbece.eu.pythonanywhere.com/api/v1/Usuario/"
-        try:
-            response = requests.get(url_api)
-
-            # Verifica si la solicitud fue exitosa (código de estado 200)
-            response.raise_for_status()
-
-            # Busca el usuario con id_manychat en la respuesta JSON
-            usuario_encontrado = next((usuario for usuario in response.json() if 'id_manychat' in usuario and str(usuario['id_manychat']) == str(dato_guardado)), None)
-
-            if usuario_encontrado:
-                print("Usuario encontrado:")
-                print(f'id: {usuario_encontrado["id"]}')
-                return Response({'id': usuario_encontrado['id']})
-            else:
-                print(f"No se encontró un usuario con id_manychat igual a {dato_guardado}")
-                return Response({'error': f'No se encontró un usuario con id_manychat igual a {dato_guardado}'}, status=404)
-
-        except requests.RequestException as e:
-            print(f"Error en la solicitud GET: {e}")
-            return Response({'error': f'Error en la solicitud GET: {e}'}, status=500)
-
+        return Response({'message': f'Dato guardado: {dato_guardado}'})
     else:
         return Response({'error': 'ID no proporcionado'}, status=400)
-
 
 
 # ----------------------
