@@ -102,7 +102,7 @@ class PreguntaOpcionRespuesta(models.Model):
 
 class UsuarioRespuesta(models.Model):
     id = models.AutoField(primary_key=True, verbose_name="ID Usuario Respuesta")
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    Rut = models.CharField(max_length=10)
     id_opc_respuesta = models.ForeignKey(PreguntaOpcionRespuesta, on_delete=models.CASCADE)
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
 

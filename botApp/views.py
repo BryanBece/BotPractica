@@ -206,44 +206,4 @@ class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
     
 
 
-#Busqueda de usuario por id_manychat
-
-
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-import requests
-
-dato_guardado = None  # Variable para almacenar el dato
-
-@api_view(['POST'])
-def guardar_dato(request):
-    global dato_guardado
-    dato_id = request.data.get('id', None)
-
-    if dato_id is not None:
-        dato_guardado = dato_id
-        return Response({'message': f'Dato guardado: {dato_guardado}'})
-    else:
-        return Response({'error': 'ID no proporcionado'}, status=400)
-
-@api_view(['GET'])
-def obtener_datos(request):
-    global dato_guardado
-    url_api = "https://practicabryanbece.eu.pythonanywhere.com/api/v1/Usuario/"
-    
-    try:
-        response = requests.get(url_api)
-        response.raise_for_status()  # Verifica si la solicitud fue exitosa (código de estado 200)
-
-        # Busca el usuario con id_manychat igual al "Dato guardado" en la respuesta JSON
-        usuarios_encontrados = [usuario for usuario in response.json() if 'id_manychat' in usuario and str(usuario['id_manychat']) == str(dato_guardado)]
-
-        if usuarios_encontrados:
-            return Response({'id': usuarios_encontrados[0]["id"]})
-        else:
-            return Response({'error': f'No se encontró un usuario con id_manychat igual a {dato_guardado}'}, status=404)
-
-    except requests.RequestException as e:
-        return Response({'error': f'Error en la solicitud GET: {e}'}, status=500)
-
-# ----------------------
+# --------------------- Api --------------------- #

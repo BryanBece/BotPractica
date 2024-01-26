@@ -22,9 +22,6 @@ urlpatterns = [
     path('eliminarPregunta/<id>/', views.eliminarPregunta, name='eliminarPregunta'),
     path('crearPregunta/', views.crearPregunta, name='crearPregunta'),
     #Api
-    path('api/v1/', include(router.urls)),
-    path('api/guardar_dato/', guardar_dato, name='guardar_dato'),
-    path('api/obtener_datos/', obtener_datos, name='obtener_datos'),
-    
+    path('api/v1/', include(router.urls)),    
 
 ]
