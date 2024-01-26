@@ -107,5 +107,5 @@ class UsuarioRespuesta(models.Model):
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.id_usuario} - {self.id_opc_respuesta}"
+        return f"{self.Rut} - {self.id_opc_respuesta}"
 
