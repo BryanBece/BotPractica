@@ -109,3 +109,11 @@ class UsuarioRespuesta(models.Model):
     def __str__(self):
         return f"{self.Rut} - {self.id_opc_respuesta}"
 
+class UsuarioTextoPregunta(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name="ID Texto Pregunta")
+    Rut = models.CharField(max_length=10)
+    texto_pregunta = models.CharField(max_length=200)
+    fecha_pregunta = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.Rut} - {self.texto_respuesta}"

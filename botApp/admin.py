@@ -98,6 +98,12 @@ class OcupacionAdmin(admin.ModelAdmin):
     list_filter = ("id", "OPC_Ocupacion")
 
 
+class UsuarioTextoPreguntaAdmin(admin.ModelAdmin):
+    list_display = ("id", "Rut", "texto_pregunta", "fecha_pregunta")
+    search_fields = ("id", "Rut", "texto_pregunta", "fecha_pregunta")
+    list_filter = ("id", "Rut", "texto_pregunta", "fecha_pregunta")
+
+
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Pregunta, PreguntaAdmin)
 admin.site.register(UsuarioRespuesta, UsuarioRespuestaAdmin)
@@ -106,3 +112,4 @@ admin.site.register(Comuna, ComunaAdmin)
 admin.site.register(Genero, GeneroAdmin)
 admin.site.register(SistemaSalud, SistemaSaludAdmin)
 admin.site.register(Ocupacion, OcupacionAdmin)
+admin.site.register(UsuarioTextoPregunta, UsuarioTextoPreguntaAdmin)
