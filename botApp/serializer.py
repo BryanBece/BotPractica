@@ -11,3 +11,8 @@ class UsuarioRespuestaSerializer(serializers.ModelSerializer):
     class Meta:
         model = UsuarioRespuesta
         fields = "__all__"
+        
+class UsuarioTextoPreguntaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UsuarioTextoPregunta
+        fields = "__all__"

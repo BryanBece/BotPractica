@@ -204,6 +204,11 @@ class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
     queryset = UsuarioRespuesta.objects.all()
     serializer_class = UsuarioRespuestaSerializer
     
+#TextoPreguntaUsuario
+class UsuarioTextoPreguntaViewSet(viewsets.ModelViewSet):
+    queryset = UsuarioTextoPregunta.objects.all()
+    serializer_class = UsuarioTextoPreguntaSerializer
+    
 
 
 # --------------------- Api --------------------- #
