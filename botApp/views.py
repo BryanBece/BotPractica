@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('Agg')
+
 from datetime import datetime
 from io import BytesIO
 import base64
@@ -9,6 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import connection
 from django.shortcuts import render, redirect
+from django.db.models import Count
+
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -19,35 +24,7 @@ from .models import *
 from .serializer import *
 
 
-def generar_grafico_respuestas_por_dia():
-    with connection.cursor() as cursor:
-        cursor.execute(
-            "SELECT DATE(Fecha_Ingreso), COUNT(*) FROM botApp_usuario GROUP BY DATE(Fecha_Ingreso)"
-        )
-        resultados = cursor.fetchall()
-
-    fechas = []
-    cantidades = []
-
-    for resultado in resultados:
-        fecha, cantidad = resultado
-        fechas.append(datetime.strftime(fecha, "%Y-%m-%d"))
-        cantidades.append(cantidad)
-
-    plt.plot(fechas, cantidades, marker="o", linestyle="-", color="blue")
-    plt.xlabel("Fecha de Respuesta")
-    plt.ylabel("Número de Respuestas")
-    plt.title("Respuestas por Día")
-
-    buffer = BytesIO()
-    plt.savefig(buffer, format="png")
-    buffer.seek(0)
-    plt.close()
-
-    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
-    return imagen_base64
-
-
+    
 @login_required
 def home(request):
     return render(request, "home.html")
@@ -101,16 +78,126 @@ def datosTextoPreguntas(request):
     }
     return render(request, "respuestas/datosPreguntasEspecialistas.html", data)
 
-# Reportes
+
+# --------------------- Reporteria --------------------- #
+
+def generar_grafico_respuestas_por_dia():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT DATE(Fecha_Ingreso), COUNT(*) FROM botApp_usuario GROUP BY DATE(Fecha_Ingreso)"
+        )
+        resultados = cursor.fetchall()
+
+    fechas = []
+    cantidades = []
+
+    for resultado in resultados:
+        fecha, cantidad = resultado
+        fechas.append(datetime.strftime(fecha, "%Y-%m-%d"))
+        cantidades.append(cantidad)
+
+    plt.plot(fechas, cantidades, marker="o", linestyle="-", color="blue")
+    plt.xlabel("Fecha de Respuesta")
+    plt.ylabel("Número de Respuestas")
+    plt.title("Respuestas por Día")
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    plt.close()
+
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return imagen_base64
+
+def generar_grafico_personas_por_genero():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT Genero_Usuario_id, COUNT(*) FROM botApp_usuario GROUP BY Genero_Usuario_id"
+        )
+        resultados = cursor.fetchall()
+
+    generos = []
+    cantidades = []
+
+    for resultado in resultados:
+        genero_id, cantidad = resultado
+        genero = Genero.objects.get(id=genero_id)
+        generos.append(genero.OPC_Genero)
+        cantidades.append(cantidad)
+
+    # Crear gráfico de dispersión con diferentes colores para cada punto
+    colores = {'Masculino': 'blue', 'Femenino': 'pink', 'Otro': 'green'}
+    plt.scatter(generos, cantidades, c=[colores[genero] for genero in generos], marker='o')
+
+    # Crear líneas desde cada punto hasta el eje y (punto 0)
+    for genero, cantidad in zip(generos, cantidades):
+        plt.plot([genero, genero], [0, cantidad], color=colores[genero], linestyle='--')
+
+    plt.xlabel("Género")
+    plt.ylabel("Número de Personas")
+    plt.title("Ingresos por Género")
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    plt.close()
+
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return imagen_base64
+    
+def generar_graficos_genero_por_comuna():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT c.Nombre_Comuna, g.OPC_Genero, COUNT(*) "
+            "FROM botApp_usuario u "
+            "JOIN botApp_comuna c ON u.Comuna_Usuario_id = c.id "
+            "JOIN botApp_genero g ON u.Genero_Usuario_id = g.id "
+            "GROUP BY c.Nombre_Comuna, g.OPC_Genero"
+        )
+        resultados = cursor.fetchall()
+
+    # Crear gráficos circulares para cada comuna
+    imagenes_base64 = []
+
+    comunas = set(result[0] for result in resultados)
+    for comuna in comunas:
+        generos = {'Masculino': 0, 'Femenino': 0, 'Otro': 0}
+        total_personas = 0
+
+        # Contar la cantidad de cada género en la comuna
+        for resultado in resultados:
+            if resultado[0] == comuna:
+                generos[resultado[1]] += resultado[2]
+                total_personas += resultado[2]
+
+        # Configurar el gráfico circular
+        fig, ax = plt.subplots()
+        ax.pie(generos.values(), labels=generos.keys(), autopct='%1.1f%%', startangle=90)
+        ax.axis('equal')  # Asegura que el gráfico sea un círculo en lugar de una elipse
+        ax.set_title(f"Comuna: {comuna}")  # Agregamos el título con el nombre de la comuna
+
+        # Convertir la imagen a base64
+        buffer = BytesIO()
+        plt.savefig(buffer, format="png")
+        buffer.seek(0)
+        plt.close()
+        imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+        imagenes_base64.append(imagen_base64)
+
+    return imagenes_base64
+
+
 @login_required
 def reportes(request):
     data = {
         "imagen_base64_ingresos": generar_grafico_respuestas_por_dia(),
-    }
+        "imagen_base64_genero":  generar_grafico_personas_por_genero(),
+        "imagen_base64_genero_comuna": generar_graficos_genero_por_comuna(),
+            }
     return render(request, "reportes.html", data)
 
 
-# Formulario
+# --------------------- Formulario WEB --------------------- #
 @login_required
 def formulario(request):
     data = {
