@@ -4,8 +4,10 @@
 
 {% block content %}
 
+
+<h2 class="major">Reportes</h2>
+<a class="button" href="{% url 'home' %}">Volver</a>
 <section id="reportes">
-    <h2 class="major">Reportes</h2>
     <div class="chart-container">
         <h2>Ingresos por día</h2>
         <img src="data:image/png;base64,{{ imagen_base64_ingresos }}" alt="Ingresos por día">
@@ -18,8 +20,9 @@
             <img src="data:image/png;base64,{{ imagen_base64 }}" alt="Género por comuna">
         {% endfor %}
     </div>
-    <a class="button" href="{% url 'home' %}">Volver</a>
+
 </section>
+<a class="button" href="{% url 'home' %}">Volver</a>
 
 <style>
     .chart-container {
