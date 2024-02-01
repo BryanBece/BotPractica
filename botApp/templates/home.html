@@ -1,42 +1,38 @@
 {% extends 'base.html' %}
-
-
-{% block title %}Inicio{% endblock %}
-
+{% block title %}Inicio{% endblock %} 
 {% block content %}
+
 <!-- Wrapper -->
 <div id="wrapper">
+  <!-- Header -->
+  <header id="header">
+    <div class="logo">
+      <span class="fas fa-home"></span>
+    </div>
+    <div class="content">
+      <div class="inner">
+        <h1>Bienvenido</h1>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="{% url 'formulario' %}">Formulario Web</a></li>
+        <li><a href="{% url 'respuestasHome' %}">Respuestas del Usuario</a></li>
+        <li><a href="{% url 'reportes' %}">Reportes</a></li>
+		<li><a href="{% url 'listarPreguntas' %}">Listado Preguntas</a></li>
+		<li><a href="{% url 'crearPregunta' %}">Crear Preguntas</a></li>
+      </ul>
+    </nav>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit">Cerrar Sesión</button>
+    </form>
+  </header>
 
-	<!-- Header -->
-	<header id="header">
-		<div class="logo">
-			<span class="fas fa-home"></span>
-		</div>
-		<div class="content">
-			<div class="inner">
-				<h1>Bienvenido</h1>
-			</div>
-		</div>
-		<nav>
-			<ul>
-				<li><a href="{% url 'formulario' %}">Formulario</a></li>
-				<li><a href="{% url 'database' %}">Respuestas</a></li>
-				<li><a href="{% url 'reportes' %}">Reportes</a></li>
-			</ul>
-		</nav>
-		<a href="{% url 'preguntas' %}"><button>Preguntas</button></a>
-		<form method="post" action="{% url 'logout' %}">
-			{% csrf_token %}
-			<button type="submit">Cerrar Sesión</button>
-		</form>
-	</header>
-
-
-	<!-- Footer -->
-	<footer id="footer">
-		<p class="copyright">&copy; Untitled.</p>
-	</footer>
-
+  <!-- Footer -->
+  <footer id="footer">
+    <p class="copyright">&copy; Untitled.</p>
+  </footer>
 </div>
 
 <!-- BG -->

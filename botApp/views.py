@@ -68,16 +68,38 @@ def login(request):
 
     return render(request, "registration/login.html")
 
+# --------------------- Respuestas de Usuario --------------------- #
+
+#Home
+@login_required
+def respuestasHome(request):
+    return render(request, "respuestas/respuestasHome.html")
+
 
 # Base de datos
 @login_required
-def database(request):
+def datosPerfil(request):
     Datos = Usuario.objects.all().order_by("-Fecha_Ingreso")
     data = {
         "Datos": Datos,
     }
-    return render(request, "database.html", data)
+    return render(request, "respuestas/datosPerfil.html", data)
 
+@login_required
+def datosPreguntas(request):
+    Datos = UsuarioRespuesta.objects.all().order_by("-fecha_respuesta")
+    data = {
+        "Datos": Datos,
+    }
+    return render(request, "respuestas/datosPreguntas.html", data)
+
+@login_required
+def datosTextoPreguntas(request):
+    Datos = UsuarioTextoPregunta.objects.all().order_by("-fecha_pregunta")
+    data = {
+        "Datos": Datos,
+    }
+    return render(request, "respuestas/datosPreguntasEspecialistas.html", data)
 
 # Reportes
 @login_required
@@ -133,10 +155,6 @@ def formulario(request):
 
 
 # --------------------- Preguntas --------------------- #
-@login_required
-def preguntasHome(request):
-    return render(request, "preguntas/preguntasHome.html")
-
 
 # Listar Preguntas
 @login_required

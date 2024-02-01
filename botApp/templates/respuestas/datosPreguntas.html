@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Datos De Preguntas{% endblock %}
+
+{% block content %}
+
+<section id="usuarios">
+    <h2 class="major">Datos De Preguntas</h2>
+
+    {% if Datos %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Rut</th>
+                    <th>Respuesta</th>
+                    <th>Fecha Respuesta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dato in Datos %}
+                <tr>
+                    <td>{{ dato.id }}</td>
+                    <td>{{ dato.Rut }}</td>
+                    <td>{{ dato.id_opc_respuesta }}</td>
+                    <td>{{ dato.fecha_respuesta }}</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No hay datos ingresados</p>
+    {% endif %}
+
+    <a class="button" href="{% url 'respuestasHome' %}">Volver</a>
+</section>
+
+{% endblock %}

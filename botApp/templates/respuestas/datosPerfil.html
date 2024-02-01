@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Base de Datos{% endblock %}
+{% block title %}Datos del Perfil{% endblock %}
 
 {% block content %}
 
 <section id="usuarios">
-    <h2 class="major">Respuestas</h2>
+    <h2 class="major">Datos del Perfil</h2>
 
     {% if Datos %}
     <div class="table-wrapper">
@@ -48,7 +48,7 @@
     <p>No hay datos ingresados</p>
     {% endif %}
 
-    <a class="button" href="{% url 'home' %}">Volver</a>
+    <a class="button" href="{% url 'respuestasHome' %}">Volver</a>
 </section>
 
 {% endblock %}

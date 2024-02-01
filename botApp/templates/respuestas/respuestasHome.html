@@ -13,13 +13,14 @@
         </div>
         <div class="content">
             <div class="inner">
-                <h1>Preguntas</h1>
+                <h1>Respuestas del Usuario</h1>
             </div>
         </div>
         <nav>
             <ul>
-                <li><a href="{% url 'listarPreguntas' %}">Lista de Preguntas</a></li>
-                <li><a href="{% url 'crearPregunta' %}">Crear Pregunta</a></li>
+                <li><a href="{% url 'datosPerfil' %}">Datos Del Perfil</a></li>
+                <li><a href="{% url 'datosPreguntas' %}">Datos de Preguntas</a></li>
+                <li><a href="{% url 'datosTextoPreguntas' %}">Preguntas a Especialistas</a></li>
             </ul>
         </nav>
         <button type="button" onclick="location.href='{% url 'home' %}'">Volver</button>
