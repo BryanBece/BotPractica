@@ -255,7 +255,45 @@ def generar_grafico_pregunta2():
     ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
     
     # Mostrar el gráfico
-    plt.title('Respuestas a otra pregunta')
+    plt.title('¿Recuerdas cuando fue tu última mamografía?')
+
+    # Guardar la imagen en un buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png", bbox_inches='tight')
+    buffer.seek(0)
+    plt.close()
+
+    # Convertir la imagen a base64
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return imagen_base64
+
+def generar_grafico_pregunta3():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (12, 13, 14) GROUP BY id_opc_respuesta_id"
+        )
+        resultados = cursor.fetchall()
+
+    labels = []
+    sizes = []
+    counts = []
+
+    for resultado in resultados:
+        id_opc_respuesta, cantidad = resultado
+        opcion_respuesta = PreguntaOpcionRespuesta.objects.get(id=id_opc_respuesta)
+        labels.append(opcion_respuesta.OPC_Respuesta)
+        sizes.append(cantidad)
+        counts.append(f"{opcion_respuesta.OPC_Respuesta} - {cantidad}")
+
+    # Configurar el gráfico circular
+    fig, ax = plt.subplots()
+    wedges, texts, autotexts = ax.pie(sizes, labels=None, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral', 'lightblue'])
+    
+    # Configurar las etiquetas del gráfico
+    ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    
+    # Mostrar el gráfico
+    plt.title('Fecha de la última mamografía')
 
     # Guardar la imagen en un buffer
     buffer = BytesIO()
@@ -268,6 +306,7 @@ def generar_grafico_pregunta2():
     return imagen_base64
 
 
+
 @login_required
 def reportes(request):
     data = {
@@ -276,6 +315,7 @@ def reportes(request):
         "imagen_base64_genero_comuna": generar_graficos_genero_por_comuna(),
         "imagen_base64_pregunta1": generar_grafico_pregunta1(),
         "imagen_base64_pregunta2": generar_grafico_pregunta2(),
+        "imagen_base64_pregunta3": generar_grafico_pregunta3(),
             }
     return render(request, "reportes.html", data)
 
