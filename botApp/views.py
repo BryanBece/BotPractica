@@ -305,7 +305,119 @@ def generar_grafico_pregunta3():
     imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     return imagen_base64
 
+def generar_grafico_pregunta4():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (15, 16, 17) GROUP BY id_opc_respuesta_id"
+        )
+        resultados = cursor.fetchall()
 
+    labels = []
+    sizes = []
+    counts = []
+
+    for resultado in resultados:
+        id_opc_respuesta, cantidad = resultado
+        opcion_respuesta = PreguntaOpcionRespuesta.objects.get(id=id_opc_respuesta)
+        labels.append(opcion_respuesta.OPC_Respuesta)
+        sizes.append(cantidad)
+        counts.append(f"{opcion_respuesta.OPC_Respuesta} - {cantidad}")
+
+    # Configurar el gráfico circular
+    fig, ax = plt.subplots()
+    wedges, texts, autotexts = ax.pie(sizes, labels=None, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral', 'lightblue'])
+    
+    # Configurar las etiquetas del gráfico
+    ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    
+    # Mostrar el gráfico
+    plt.title('¿Tienes los archivos e informe de tu última mamografía?')
+
+    # Guardar la imagen en un buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png", bbox_inches='tight')
+    buffer.seek(0)
+    plt.close()
+
+    # Convertir la imagen a base64
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return imagen_base64
+
+def generar_grafico_pregunta5():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (18, 19, 20) GROUP BY id_opc_respuesta_id"
+        )
+        resultados = cursor.fetchall()
+
+    labels = []
+    sizes = []
+    counts = []
+
+    for resultado in resultados:
+        id_opc_respuesta, cantidad = resultado
+        opcion_respuesta = PreguntaOpcionRespuesta.objects.get(id=id_opc_respuesta)
+        labels.append(opcion_respuesta.OPC_Respuesta)
+        sizes.append(cantidad)
+        counts.append(f"{opcion_respuesta.OPC_Respuesta} - {cantidad}")
+
+    # Configurar el gráfico circular
+    fig, ax = plt.subplots()
+    wedges, texts, autotexts = ax.pie(sizes, labels=None, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral', 'lightblue'])
+    
+    # Configurar las etiquetas del gráfico
+    ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    
+    # Mostrar el gráfico
+    plt.title('¿Te gustaría recibir más información sobre el cuidado y prevención del cáncer de mama?')
+
+    # Guardar la imagen en un buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png", bbox_inches='tight')
+    buffer.seek(0)
+    plt.close()
+
+    # Convertir la imagen a base64
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return imagen_base64
+
+def generar_grafico_pregunta6():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (22, 23, 24) GROUP BY id_opc_respuesta_id"
+        )
+        resultados = cursor.fetchall()
+
+    labels = []
+    sizes = []
+    counts = []
+
+    for resultado in resultados:
+        id_opc_respuesta, cantidad = resultado
+        opcion_respuesta = PreguntaOpcionRespuesta.objects.get(id=id_opc_respuesta)
+        labels.append(opcion_respuesta.OPC_Respuesta)
+        sizes.append(cantidad)
+        counts.append(f"{opcion_respuesta.OPC_Respuesta} - {cantidad}")
+
+    # Configurar el gráfico circular
+    fig, ax = plt.subplots()
+    wedges, texts, autotexts = ax.pie(sizes, labels=None, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral', 'lightblue'])
+    
+    # Configurar las etiquetas del gráfico
+    ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    
+    # Mostrar el gráfico
+    plt.title('¿Tienes un familiar directo con cáncer de mama? (hermana, mama, tía, abuela)')
+
+    # Guardar la imagen en un buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png", bbox_inches='tight')
+    buffer.seek(0)
+    plt.close()
+
+    # Convertir la imagen a base64
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return imagen_base64
 
 @login_required
 def reportes(request):
@@ -316,6 +428,9 @@ def reportes(request):
         "imagen_base64_pregunta1": generar_grafico_pregunta1(),
         "imagen_base64_pregunta2": generar_grafico_pregunta2(),
         "imagen_base64_pregunta3": generar_grafico_pregunta3(),
+        "imagen_base64_pregunta4": generar_grafico_pregunta4(),
+        "imagen_base64_pregunta5": generar_grafico_pregunta5(),
+        "imagen_base64_pregunta6": generar_grafico_pregunta6(),        
             }
     return render(request, "reportes.html", data)
 
@@ -436,7 +551,5 @@ class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
 class UsuarioTextoPreguntaViewSet(viewsets.ModelViewSet):
     queryset = UsuarioTextoPregunta.objects.all()
     serializer_class = UsuarioTextoPreguntaSerializer
-    
-
 
 # --------------------- Api --------------------- #
