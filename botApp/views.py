@@ -191,19 +191,6 @@ def generar_graficos_genero_por_comuna():
 
     return imagenes_base64
 
-import matplotlib.pyplot as plt
-from io import BytesIO
-import base64
-from django.db import connection
-from datetime import datetime
-from .models import PreguntaOpcionRespuesta
-
-import matplotlib.pyplot as plt
-from io import BytesIO
-import base64
-from django.db import connection
-from datetime import datetime
-from .models import PreguntaOpcionRespuesta
 
 def generar_grafico_respuestas():
     with connection.cursor() as cursor:
@@ -225,21 +212,25 @@ def generar_grafico_respuestas():
 
     # Configurar el gráfico circular
     fig, ax = plt.subplots()
-    ax.pie(sizes, labels=counts, autopct='', startangle=90, colors=['lightgreen', 'lightcoral'])
-    ax.axis('equal')  # Equal aspect ratio asegura que el gráfico sea circular.
+    wedges, texts, autotexts = ax.pie(sizes, labels=None, autopct='', startangle=90, colors=['lightgreen', 'lightcoral'])
+    
+    # Configurar las etiquetas del gráfico
+    ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    plt.setp(autotexts, size=8, weight="bold")
 
     # Mostrar el gráfico
-    plt.title('¿Te has realizado una mamografía?')
+    plt.title('Respuestas a la pregunta')
 
     # Guardar la imagen en un buffer
     buffer = BytesIO()
-    plt.savefig(buffer, format="png")
+    plt.savefig(buffer, format="png", bbox_inches='tight')
     buffer.seek(0)
     plt.close()
 
     # Convertir la imagen a base64
     imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     return imagen_base64
+
 
 
 
