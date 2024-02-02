@@ -208,16 +208,15 @@ def generar_grafico_respuestas():
         opcion_respuesta = PreguntaOpcionRespuesta.objects.get(id=id_opc_respuesta)
         labels.append(opcion_respuesta.OPC_Respuesta)
         sizes.append(cantidad)
-        counts.append(f"{cantidad} ({(cantidad/sum(sizes))*100:.1f}%)")
+        counts.append(f"{opcion_respuesta.OPC_Respuesta} - {cantidad} ({(cantidad/sum(sizes))*100:.1f}%)")
 
     # Configurar el gráfico circular
     fig, ax = plt.subplots()
-    wedges, texts, autotexts = ax.pie(sizes, labels=None, autopct='', startangle=90, colors=['lightgreen', 'lightcoral'])
+    ax.pie(sizes, labels=None, autopct='', startangle=90, colors=['lightgreen', 'lightcoral'])
     
     # Configurar las etiquetas del gráfico
-    ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
-    plt.setp(autotexts, size=8, weight="bold")
-
+    ax.legend(counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    
     # Mostrar el gráfico
     plt.title('Respuestas a la pregunta')
 
