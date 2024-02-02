@@ -245,7 +245,7 @@ def generar_grafico_pregunta2():
         opcion_respuesta = PreguntaOpcionRespuesta.objects.get(id=id_opc_respuesta)
         labels.append(opcion_respuesta.OPC_Respuesta)
         sizes.append(cantidad)
-        counts.append(cantidad)
+        counts.append(f"{opcion_respuesta.OPC_Respuesta} - {cantidad}")
 
     # Configurar el gráfico circular
     fig, ax = plt.subplots()
