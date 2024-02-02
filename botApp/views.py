@@ -198,6 +198,13 @@ from django.db import connection
 from datetime import datetime
 from .models import PreguntaOpcionRespuesta
 
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+from django.db import connection
+from datetime import datetime
+from .models import PreguntaOpcionRespuesta
+
 def generar_grafico_respuestas():
     with connection.cursor() as cursor:
         cursor.execute(
@@ -207,20 +214,22 @@ def generar_grafico_respuestas():
 
     labels = []
     sizes = []
+    counts = []
 
     for resultado in resultados:
         id_opc_respuesta, cantidad = resultado
         opcion_respuesta = PreguntaOpcionRespuesta.objects.get(id=id_opc_respuesta)
         labels.append(opcion_respuesta.OPC_Respuesta)
         sizes.append(cantidad)
+        counts.append(f"{cantidad} ({(cantidad/sum(sizes))*100:.1f}%)")
 
     # Configurar el gráfico circular
     fig, ax = plt.subplots()
-    ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral'])
+    ax.pie(sizes, labels=counts, autopct='', startangle=90, colors=['lightgreen', 'lightcoral'])
     ax.axis('equal')  # Equal aspect ratio asegura que el gráfico sea circular.
 
     # Mostrar el gráfico
-    plt.title('Respuestas a la pregunta')
+    plt.title('¿Te has realizado una mamografía?')
 
     # Guardar la imagen en un buffer
     buffer = BytesIO()
@@ -231,6 +240,7 @@ def generar_grafico_respuestas():
     # Convertir la imagen a base64
     imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     return imagen_base64
+
 
 
 @login_required
