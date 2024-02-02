@@ -23,11 +23,8 @@
                 <li><a href="{% url 'datosTextoPreguntas' %}">Preguntas a Especialistas</a></li>
             </ul>
         </nav>
+        <button type="button" onclick="location.href='{% url 'home' %}'">Descargar como excel</button>
         <button type="button" onclick="location.href='{% url 'home' %}'">Volver</button>
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Cerrar Sesión</button>
-        </form>
     </header>
 
 
