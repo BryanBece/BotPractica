@@ -191,7 +191,6 @@ def generar_graficos_genero_por_comuna():
 
     return imagenes_base64
 
-
 def generar_grafico_respuestas():
     with connection.cursor() as cursor:
         cursor.execute(
@@ -208,14 +207,14 @@ def generar_grafico_respuestas():
         opcion_respuesta = PreguntaOpcionRespuesta.objects.get(id=id_opc_respuesta)
         labels.append(opcion_respuesta.OPC_Respuesta)
         sizes.append(cantidad)
-        counts.append(f"{opcion_respuesta.OPC_Respuesta} - {cantidad} ({(cantidad/sum(sizes))*100:.1f}%)")
+        counts.append(cantidad)
 
     # Configurar el gráfico circular
     fig, ax = plt.subplots()
-    ax.pie(sizes, labels=None, autopct='', startangle=90, colors=['lightgreen', 'lightcoral'])
+    wedges, texts, autotexts = ax.pie(sizes, labels=None, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral'])
     
     # Configurar las etiquetas del gráfico
-    ax.legend(counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
     
     # Mostrar el gráfico
     plt.title('Respuestas a la pregunta')
