@@ -207,14 +207,14 @@ def generar_grafico_pregunta1():
         opcion_respuesta = PreguntaOpcionRespuesta.objects.get(id=id_opc_respuesta)
         labels.append(opcion_respuesta.OPC_Respuesta)
         sizes.append(cantidad)
-        counts.append(cantidad)
+        counts.append(f"{opcion_respuesta.OPC_Respuesta} - {cantidad}")
 
     # Configurar el gráfico circular
     fig, ax = plt.subplots()
     wedges, texts, autotexts = ax.pie(sizes, labels=None, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral'])
     
     # Configurar las etiquetas del gráfico
-    ax.legend(wedges, labels, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
     
     # Mostrar el gráfico
     plt.title('¿Te has realizado una mamografía?')
