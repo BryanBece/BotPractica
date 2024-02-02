@@ -214,7 +214,7 @@ def generar_grafico_pregunta1():
     wedges, texts, autotexts = ax.pie(sizes, labels=None, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral'])
     
     # Configurar las etiquetas del gráfico
-    ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    ax.legend(wedges, labels, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
     
     # Mostrar el gráfico
     plt.title('¿Te has realizado una mamografía?')
