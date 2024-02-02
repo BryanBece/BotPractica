@@ -191,7 +191,7 @@ def generar_graficos_genero_por_comuna():
 
     return imagenes_base64
 
-def generar_grafico_respuestas():
+def generar_grafico_pregunta1():
     with connection.cursor() as cursor:
         cursor.execute(
             "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (8, 9) GROUP BY id_opc_respuesta_id"
@@ -217,7 +217,45 @@ def generar_grafico_respuestas():
     ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
     
     # Mostrar el gráfico
-    plt.title('Respuestas a la pregunta')
+    plt.title('¿Te has realizado una mamografía?')
+
+    # Guardar la imagen en un buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png", bbox_inches='tight')
+    buffer.seek(0)
+    plt.close()
+
+    # Convertir la imagen a base64
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return imagen_base64
+
+def generar_grafico_pregunta2():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (10, 11) GROUP BY id_opc_respuesta_id"
+        )
+        resultados = cursor.fetchall()
+
+    labels = []
+    sizes = []
+    counts = []
+
+    for resultado in resultados:
+        id_opc_respuesta, cantidad = resultado
+        opcion_respuesta = PreguntaOpcionRespuesta.objects.get(id=id_opc_respuesta)
+        labels.append(opcion_respuesta.OPC_Respuesta)
+        sizes.append(cantidad)
+        counts.append(cantidad)
+
+    # Configurar el gráfico circular
+    fig, ax = plt.subplots()
+    wedges, texts, autotexts = ax.pie(sizes, labels=None, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral'])
+    
+    # Configurar las etiquetas del gráfico
+    ax.legend(wedges, counts, title="Respuestas", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    
+    # Mostrar el gráfico
+    plt.title('Respuestas a otra pregunta')
 
     # Guardar la imagen en un buffer
     buffer = BytesIO()
@@ -230,15 +268,14 @@ def generar_grafico_respuestas():
     return imagen_base64
 
 
-
-
 @login_required
 def reportes(request):
     data = {
         "imagen_base64_ingresos": generar_grafico_respuestas_por_dia(),
         "imagen_base64_genero":  generar_grafico_personas_por_genero(),
         "imagen_base64_genero_comuna": generar_graficos_genero_por_comuna(),
-        "imagen_base64_respuestas": generar_grafico_respuestas(),
+        "imagen_base64_pregunta1": generar_grafico_pregunta1(),
+        "imagen_base64_pregunta2": generar_grafico_pregunta2(),
             }
     return render(request, "reportes.html", data)
 
