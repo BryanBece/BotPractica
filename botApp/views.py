@@ -191,10 +191,17 @@ def generar_graficos_genero_por_comuna():
 
     return imagenes_base64
 
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+from django.db import connection
+from datetime import datetime
+from .models import PreguntaOpcionRespuesta
+
 def generar_grafico_respuestas():
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta GROUP BY id_opc_respuesta_id"
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (8, 9) GROUP BY id_opc_respuesta_id"
         )
         resultados = cursor.fetchall()
 
@@ -214,7 +221,7 @@ def generar_grafico_respuestas():
 
     # Mostrar el gráfico
     plt.title('Respuestas a la pregunta')
-    
+
     # Guardar la imagen en un buffer
     buffer = BytesIO()
     plt.savefig(buffer, format="png")
@@ -224,6 +231,7 @@ def generar_grafico_respuestas():
     # Convertir la imagen a base64
     imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     return imagen_base64
+
 
 @login_required
 def reportes(request):
