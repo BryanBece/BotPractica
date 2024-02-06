@@ -139,6 +139,21 @@ def crear_excel_desde_db():
         datos_usuario = [str(getattr(usuario, campo)) for campo in campos_usuario]
         ws_datos_perfil.append(datos_usuario)
 
+    # Hoja para preguntas al especialista
+    ws_preguntas_especialista = wb.create_sheet(title='Preguntas al especialista')
+
+    # Obtener los nombres de los campos del modelo UsuarioTextoPregunta
+    campos_preguntas_especialista = [field.name for field in UsuarioTextoPregunta._meta.fields if field.name != 'id']
+
+    # Agregar los nombres de los campos a la primera fila del archivo Excel
+    ws_preguntas_especialista.append(campos_preguntas_especialista)
+
+    # Obtener los datos de las preguntas al especialista y agregarlos al archivo Excel
+    for pregunta in UsuarioTextoPregunta.objects.all():
+        # Convertir la fecha a formato de texto para evitar problemas con zonas horarias
+        datos_pregunta = [str(getattr(pregunta, campo)) for campo in campos_preguntas_especialista]
+        ws_preguntas_especialista.append(datos_pregunta)
+
     # Guardar el libro de trabajo en un archivo
     nombre_archivo = 'reporte_respuestas.xlsx'
     wb.save(nombre_archivo)
