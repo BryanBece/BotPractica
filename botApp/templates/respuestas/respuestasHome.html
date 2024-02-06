@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Preguntas{% endblock %}
+{% block title %}Respuestas Del Usuario{% endblock %}
 
 {% block content %}
 <!-- Wrapper -->
@@ -23,7 +23,10 @@
                 <li><a href="{% url 'datosTextoPreguntas' %}">Preguntas a Especialistas</a></li>
             </ul>
         </nav>
-        <button type="button" onclick="location.href='{% url 'home' %}'">Descargar como excel</button>
+        <form action="{% url 'descargar_excel' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Descargar como Excel</button>
+        </form>
         <button type="button" onclick="location.href='{% url 'home' %}'">Volver</button>
     </header>
 

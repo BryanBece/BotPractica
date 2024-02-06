@@ -1,11 +1,13 @@
 import matplotlib
 matplotlib.use('Agg')
 
+from openpyxl import Workbook
 from datetime import datetime
 from io import BytesIO
 import base64
 import matplotlib.pyplot as plt
 import requests
+
 
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
@@ -13,6 +15,8 @@ from django.contrib.auth.models import User
 from django.db import connection
 from django.shortcuts import render, redirect
 from django.db.models import Count
+from django.http import HttpResponse
+
 
 
 from rest_framework.decorators import api_view
@@ -78,7 +82,36 @@ def datosTextoPreguntas(request):
     }
     return render(request, "respuestas/datosPreguntasEspecialistas.html", data)
 
+def crear_excel_desde_db():
+    # Crear un nuevo libro de trabajo de Excel y seleccionar la hoja activa
+    wb = Workbook()
+    ws = wb.active
 
+    # Obtener los datos de la base de datos
+    datos = UsuarioRespuesta.objects.values('id_opc_respuesta__OPC_Respuesta').annotate(cantidad=Count('id'))
+
+    # Escribir los encabezados en la primera fila del archivo Excel
+    ws.append(['Respuesta', 'Cantidad'])
+
+    # Escribir los datos en el archivo Excel
+    for dato in datos:
+        ws.append([dato['id_opc_respuesta__OPC_Respuesta'], dato['cantidad']])
+
+    # Guardar el libro de trabajo en un archivo
+    nombre_archivo = 'reporte_respuestas.xlsx'
+    wb.save(nombre_archivo)
+
+    return nombre_archivo
+
+def descargar_excel(request):
+    # Llama a la función para crear el Excel
+    nombre_archivo = crear_excel_desde_db()
+
+    # Abre el archivo Excel y lo envía como una respuesta de descarga
+    with open(nombre_archivo, 'rb') as excel_file:
+        response = HttpResponse(excel_file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename={nombre_archivo}'
+        return response
 # --------------------- Reporteria --------------------- #
 
 def generar_grafico_respuestas_por_dia():
