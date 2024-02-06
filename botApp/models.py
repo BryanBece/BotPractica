@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 
+
 class Comuna(models.Model):
     id = models.AutoField(primary_key=True, verbose_name="ID Comuna")
     Nombre_Comuna = models.CharField(max_length=50)

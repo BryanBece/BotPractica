@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import connection
 from django.shortcuts import render, redirect
-from django.db.models import Count
+from django.db.models import Count, F, Max
 from django.http import HttpResponse
 
 
@@ -87,15 +87,39 @@ def crear_excel_desde_db():
     wb = Workbook()
     ws = wb.active
 
-    # Obtener los datos de la base de datos
-    datos = UsuarioRespuesta.objects.values('id_opc_respuesta__OPC_Respuesta').annotate(cantidad=Count('id'))
+    # Obtener todas las preguntas y almacenarlas en una lista
+    preguntas = Pregunta.objects.all()
+    lista_preguntas = ['Rut'] + [pregunta.pregunta for pregunta in preguntas]
 
-    # Escribir los encabezados en la primera fila del archivo Excel
-    ws.append(['Respuesta', 'Cantidad'])
+    # Agregar las preguntas a la primera fila del archivo Excel
+    ws.append(lista_preguntas)
 
-    # Escribir los datos en el archivo Excel
-    for dato in datos:
-        ws.append([dato['id_opc_respuesta__OPC_Respuesta'], dato['cantidad']])
+    # Obtener los datos de los usuarios y sus respuestas
+    usuarios_respuestas = UsuarioRespuesta.objects.select_related('id_opc_respuesta', 'id_opc_respuesta__id_pregunta').values(
+        'Rut',
+        'id_opc_respuesta__id_pregunta__pregunta',
+        'id_opc_respuesta__OPC_Respuesta'
+    )
+
+    # Crear un diccionario para almacenar las respuestas de los usuarios
+    dict_respuestas = {}
+
+    # Agregar las respuestas de los usuarios al diccionario
+    for respuesta in usuarios_respuestas:
+        rut = respuesta['Rut']
+        pregunta = respuesta['id_opc_respuesta__id_pregunta__pregunta']
+        respuesta_usuario = respuesta['id_opc_respuesta__OPC_Respuesta']
+        if rut not in dict_respuestas:
+            dict_respuestas[rut] = {}
+        dict_respuestas[rut][pregunta] = respuesta_usuario
+
+    # Agregar las respuestas de los usuarios al archivo Excel
+    for rut, respuestas_usuario in dict_respuestas.items():
+        fila = [rut]
+        for pregunta in preguntas:
+            respuesta = respuestas_usuario.get(pregunta.pregunta, '')
+            fila.append(respuesta)
+        ws.append(fila)
 
     # Guardar el libro de trabajo en un archivo
     nombre_archivo = 'reporte_respuestas.xlsx'
