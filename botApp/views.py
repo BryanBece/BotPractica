@@ -16,7 +16,7 @@ from django.db import connection
 from django.shortcuts import render, redirect
 from django.db.models import Count, F, Max
 from django.http import HttpResponse
-
+from django.utils import timezone
 
 
 from rest_framework.decorators import api_view
@@ -83,16 +83,19 @@ def datosTextoPreguntas(request):
     return render(request, "respuestas/datosPreguntasEspecialistas.html", data)
 
 def crear_excel_desde_db():
-    # Crear un nuevo libro de trabajo de Excel y seleccionar la hoja activa
+    # Crear un nuevo libro de trabajo de Excel
     wb = Workbook()
-    ws = wb.active
+
+    # Hoja para respuestas de usuarios
+    ws_respuestas_usuario = wb.active
+    ws_respuestas_usuario.title = 'Respuestas Usuario'
 
     # Obtener todas las preguntas y almacenarlas en una lista
     preguntas = Pregunta.objects.all()
     lista_preguntas = ['Rut'] + [pregunta.pregunta for pregunta in preguntas]
 
     # Agregar las preguntas a la primera fila del archivo Excel
-    ws.append(lista_preguntas)
+    ws_respuestas_usuario.append(lista_preguntas)
 
     # Obtener los datos de los usuarios y sus respuestas
     usuarios_respuestas = UsuarioRespuesta.objects.select_related('id_opc_respuesta', 'id_opc_respuesta__id_pregunta').values(
@@ -119,7 +122,22 @@ def crear_excel_desde_db():
         for pregunta in preguntas:
             respuesta = respuestas_usuario.get(pregunta.pregunta, '')
             fila.append(respuesta)
-        ws.append(fila)
+        ws_respuestas_usuario.append(fila)
+
+    # Hoja para datos del perfil de usuario
+    ws_datos_perfil = wb.create_sheet(title='Datos Perfil')
+
+    # Obtener los nombres de los campos del modelo Usuario
+    campos_usuario = [field.name for field in Usuario._meta.fields if field.name not in ['Comuna_Usuario', 'Genero_Usuario', 'SistemaSalud_Usuario', 'Ocupacion_Usuario']]
+
+    # Agregar los nombres de los campos a la primera fila del archivo Excel
+    ws_datos_perfil.append(campos_usuario)
+
+    # Obtener los datos de los usuarios y agregarlos al archivo Excel
+    for usuario in Usuario.objects.all():
+        # Convertir la fecha a formato de texto para evitar problemas con zonas horarias
+        datos_usuario = [str(getattr(usuario, campo)) for campo in campos_usuario]
+        ws_datos_perfil.append(datos_usuario)
 
     # Guardar el libro de trabajo en un archivo
     nombre_archivo = 'reporte_respuestas.xlsx'
