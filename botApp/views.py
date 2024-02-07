@@ -322,7 +322,7 @@ def generar_grafico_pregunta1():
 def generar_grafico_pregunta2():
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (10, 11) GROUP BY id_opc_respuesta_id"
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (10, 11, 12) GROUP BY id_opc_respuesta_id"
         )
         resultados = cursor.fetchall()
 
@@ -360,7 +360,7 @@ def generar_grafico_pregunta2():
 def generar_grafico_pregunta3():
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (12, 13, 14) GROUP BY id_opc_respuesta_id"
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (13, 14, 15, 16) GROUP BY id_opc_respuesta_id"
         )
         resultados = cursor.fetchall()
 
@@ -398,7 +398,7 @@ def generar_grafico_pregunta3():
 def generar_grafico_pregunta4():
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (15, 16, 17) GROUP BY id_opc_respuesta_id"
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (17, 18, 19, 20) GROUP BY id_opc_respuesta_id"
         )
         resultados = cursor.fetchall()
 
@@ -436,7 +436,7 @@ def generar_grafico_pregunta4():
 def generar_grafico_pregunta5():
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (18, 19, 20) GROUP BY id_opc_respuesta_id"
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (21, 22, 23) GROUP BY id_opc_respuesta_id"
         )
         resultados = cursor.fetchall()
 
@@ -474,7 +474,7 @@ def generar_grafico_pregunta5():
 def generar_grafico_pregunta6():
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (22, 23, 24) GROUP BY id_opc_respuesta_id"
+            "SELECT id_opc_respuesta_id, COUNT(*) FROM botApp_usuariorespuesta WHERE id_opc_respuesta_id IN (25, 26, 27) GROUP BY id_opc_respuesta_id"
         )
         resultados = cursor.fetchall()
 
