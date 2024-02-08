@@ -235,51 +235,72 @@ def generar_grafico_personas_por_genero():
     imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     return imagen_base64
     
-def generar_graficos_genero_por_comuna():
+def generar_grafico_ingresos_por_comuna():
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT c.Nombre_Comuna, g.OPC_Genero, COUNT(*) "
+            "SELECT c.Nombre_Comuna, COUNT(*) AS TotalIngresos "
             "FROM botApp_usuario u "
             "JOIN botApp_comuna c ON u.Comuna_Usuario_id = c.id "
-            "JOIN botApp_genero g ON u.Genero_Usuario_id = g.id "
-            "GROUP BY c.Nombre_Comuna, g.OPC_Genero"
+            "GROUP BY c.Nombre_Comuna"
         )
         resultados = cursor.fetchall()
 
-    # Crear gráficos circulares para cada comuna
-    imagenes_base64 = []
+    comunas = [result[0] for result in resultados]
+    total_ingresos = [result[1] for result in resultados]
 
-    comunas = set(result[0] for result in resultados)
-    for comuna in comunas:
-        generos = {'Masculino': 0, 'Femenino': 0, 'Otro': 0}
-        total_personas = 0
+    # Configurar el gráfico circular
+    fig, ax = plt.subplots()
+    wedges, texts, autotexts = ax.pie(total_ingresos, labels=comunas, autopct=lambda pct: f"{pct:.1f}%\n{int(pct/100 * sum(total_ingresos))} ingresos", startangle=90)
+    ax.axis('equal')  # Asegura que el gráfico sea un círculo en lugar de una elipse
+    ax.set_title('Distribución de Ingresos por Comuna')
 
-        # Contar la cantidad de cada género en la comuna
-        for resultado in resultados:
-            if resultado[0] == comuna:
-                generos[resultado[1]] += resultado[2]
-                total_personas += resultado[2]
+    # Ajustar el tamaño de la fuente en los textos
+    for text, autotext in zip(texts, autotexts):
+        text.set(size=8)
+        autotext.set(size=8)
 
-        # Configurar el gráfico circular
-        fig, ax = plt.subplots()
-        wedges, texts, autotexts = ax.pie(generos.values(), labels=generos.keys(), autopct=lambda pct: f"{pct:.1f}%\n{int(total_personas * pct / 100)} personas", startangle=90)
-        ax.axis('equal')  # Asegura que el gráfico sea un círculo en lugar de una elipse
-        ax.set_title(f"Comuna: {comuna}")  # Agregamos el título con el nombre de la comuna
+    # Convertir el gráfico a base64
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plt.close()
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-        # Ajustar el tamaño de la fuente en los textos
-        for text, autotext in zip(texts, autotexts):
-            text.set(size=8)
-            autotext.set(size=8)
+    return imagen_base64
 
-        # Convertir la imagen a base64
-        buffer = BytesIO()
-        plt.savefig(buffer, format="png")
-        buffer.seek(0)
-        plt.close()
-        imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
-        imagenes_base64.append(imagen_base64)
+def generar_grafico_referencias():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT u.Referencia, COUNT(*) AS TotalIngresos "
+            "FROM botApp_usuario u "
+            "GROUP BY u.Referencia"
+        )
+        resultados = cursor.fetchall()
 
-    return imagenes_base64
+    referencias = [result[0] for result in resultados]
+    total_ingresos = [result[1] for result in resultados]
+
+    # Configurar el gráfico circular
+    fig, ax = plt.subplots()
+    wedges, texts, autotexts = ax.pie(total_ingresos, labels=referencias, autopct=lambda pct: f"{pct:.1f}%\n{int(pct/100 * sum(total_ingresos))} ingresos", startangle=90)
+    ax.axis('equal')  # Asegura que el gráfico sea un círculo en lugar de una elipse
+    ax.set_title('Distribución de Ingresos por Referencia')
+
+    # Ajustar el tamaño de la fuente en los textos
+    for text, autotext in zip(texts, autotexts):
+        text.set(size=8)
+        autotext.set(size=8)
+
+    # Convertir el gráfico a base64
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plt.close()
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+    return imagen_base64
+
+
 
 def generar_grafico_pregunta1():
     with connection.cursor() as cursor:
@@ -514,13 +535,14 @@ def reportes(request):
     data = {
         "imagen_base64_ingresos": generar_grafico_respuestas_por_dia(),
         "imagen_base64_genero":  generar_grafico_personas_por_genero(),
-        "imagen_base64_genero_comuna": generar_graficos_genero_por_comuna(),
+        "imagen_base64_ingresos_comuna": generar_grafico_ingresos_por_comuna(),
         "imagen_base64_pregunta1": generar_grafico_pregunta1(),
         "imagen_base64_pregunta2": generar_grafico_pregunta2(),
         "imagen_base64_pregunta3": generar_grafico_pregunta3(),
         "imagen_base64_pregunta4": generar_grafico_pregunta4(),
         "imagen_base64_pregunta5": generar_grafico_pregunta5(),
-        "imagen_base64_pregunta6": generar_grafico_pregunta6(),        
+        "imagen_base64_pregunta6": generar_grafico_pregunta6(),  
+        "imagen_base64_referencias": generar_grafico_referencias(),     
             }
     return render(request, "reportes.html", data)
 
