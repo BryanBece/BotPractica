@@ -191,6 +191,10 @@ def generar_grafico_respuestas_por_dia():
     plt.ylabel("Número de Respuestas")
     plt.title("Respuestas por Día")
 
+    # Agregar los valores de cada punto
+    for fecha, cantidad in zip(fechas, cantidades):
+        plt.annotate(f"{cantidad}", (fecha, cantidad), textcoords="offset points", xytext=(0,10), ha='center')
+
     buffer = BytesIO()
     plt.savefig(buffer, format="png")
     buffer.seek(0)
@@ -215,13 +219,13 @@ def generar_grafico_personas_por_genero():
         generos.append(genero.OPC_Genero)
         cantidades.append(cantidad)
 
-    # Crear gráfico de dispersión con diferentes colores para cada punto
+    # Crear gráfico de barras con diferentes colores para cada barra
     colores = {'Masculino': 'blue', 'Femenino': 'pink', 'Otro': 'green'}
-    plt.scatter(generos, cantidades, c=[colores[genero] for genero in generos], marker='o')
+    plt.bar(generos, cantidades, color=[colores[genero] for genero in generos])
 
-    # Crear líneas desde cada punto hasta el eje y (punto 0)
-    for genero, cantidad in zip(generos, cantidades):
-        plt.plot([genero, genero], [0, cantidad], color=colores[genero], linestyle='--')
+    # Agregar los valores de cada barra
+    for i in range(len(generos)):
+        plt.text(i, cantidades[i], str(cantidades[i]), ha='center', va='bottom')
 
     plt.xlabel("Género")
     plt.ylabel("Número de Personas")
@@ -234,6 +238,8 @@ def generar_grafico_personas_por_genero():
 
     imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     return imagen_base64
+
+
     
 def generar_grafico_ingresos_por_comuna():
     with connection.cursor() as cursor:
