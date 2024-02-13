@@ -119,3 +119,7 @@ class UsuarioTextoPregunta(models.Model):
 
     def __str__(self):
         return f"{self.Rut} - {self.texto_pregunta}"
+    
+class MiTabla(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name="ID Texto")
+    texto = models.CharField(max_length=200)

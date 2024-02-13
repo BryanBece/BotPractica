@@ -31,5 +31,6 @@ urlpatterns = [
     path('descargar_excel/', views.descargar_excel, name='descargar_excel'),
 
     # API
-    path('api/v1/', include(router.urls)),    
+    path('api/v1/', include(router.urls)),
+    path('obtener-id/', ObtenerID.as_view(), name='obtener_id'),    
 ]

@@ -19,6 +19,8 @@ from django.http import HttpResponse
 from django.utils import timezone
 
 
+
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -669,5 +671,23 @@ class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
 class UsuarioTextoPreguntaViewSet(viewsets.ModelViewSet):
     queryset = UsuarioTextoPregunta.objects.all()
     serializer_class = UsuarioTextoPreguntaSerializer
+    
+class ObtenerID(APIView):
+    ultimo_id = None
+
+    def get(self, request):
+        if ObtenerID.ultimo_id is None:
+            # Obtener el primer ID de la tabla
+            ObtenerID.ultimo_id = MiTabla.objects.all().order_by('id').first().id
+        else:
+            # Obtener el siguiente ID de la tabla
+            siguiente_id = MiTabla.objects.filter(id__gt=ObtenerID.ultimo_id).order_by('id').first()
+            if siguiente_id is None:
+                # Si no hay más IDs disponibles, regresar al primer ID
+                ObtenerID.ultimo_id = MiTabla.objects.all().order_by('id').first().id
+            else:
+                ObtenerID.ultimo_id = siguiente_id.id
+
+        return Response({'id': ObtenerID.ultimo_id})
 
 # --------------------- Api --------------------- #
