@@ -677,17 +677,22 @@ class ObtenerID(APIView):
 
     def get(self, request):
         if ObtenerID.ultimo_id is None:
-            # Obtener el primer ID de la tabla
-            ObtenerID.ultimo_id = MiTabla.objects.all().order_by('id').first().id
+            # Obtener el primer registro de la tabla
+            primer_registro = MiTabla.objects.all().order_by('id').first()
+            ObtenerID.ultimo_id = primer_registro.id
+            texto = primer_registro.texto
         else:
-            # Obtener el siguiente ID de la tabla
-            siguiente_id = MiTabla.objects.filter(id__gt=ObtenerID.ultimo_id).order_by('id').first()
-            if siguiente_id is None:
-                # Si no hay más IDs disponibles, regresar al primer ID
-                ObtenerID.ultimo_id = MiTabla.objects.all().order_by('id').first().id
+            # Obtener el siguiente registro de la tabla
+            siguiente_registro = MiTabla.objects.filter(id__gt=ObtenerID.ultimo_id).order_by('id').first()
+            if siguiente_registro is None:
+                # Si no hay más registros disponibles, regresar al primer registro
+                primer_registro = MiTabla.objects.all().order_by('id').first()
+                ObtenerID.ultimo_id = primer_registro.id
+                texto = primer_registro.texto
             else:
-                ObtenerID.ultimo_id = siguiente_id.id
-
-        return Response({'id': ObtenerID.ultimo_id})
+                ObtenerID.ultimo_id = siguiente_registro.id
+                texto = siguiente_registro.texto
+                
+        return Response({'id': ObtenerID.ultimo_id, 'texto': texto})
 
 # --------------------- Api --------------------- #
