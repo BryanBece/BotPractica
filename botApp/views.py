@@ -17,6 +17,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Count, F, Max
 from django.http import HttpResponse
 from django.utils import timezone
+from datetime import date
 
 
 
@@ -673,26 +674,17 @@ class UsuarioTextoPreguntaViewSet(viewsets.ModelViewSet):
     serializer_class = UsuarioTextoPreguntaSerializer
     
 class ObtenerID(APIView):
-    ultimo_id = None
-
     def get(self, request):
-        if ObtenerID.ultimo_id is None:
-            # Obtener el primer registro de la tabla
-            primer_registro = MiTabla.objects.all().order_by('id').first()
-            ObtenerID.ultimo_id = primer_registro.id
-            texto = primer_registro.texto
+        # Obtener la fecha de hoy
+        fecha_hoy = date.today()
+        
+        # Buscar un registro en la tabla que coincida con la fecha de hoy
+        registro_hoy = MiTabla.objects.filter(fecha=fecha_hoy).first()
+        
+        if registro_hoy:
+            # Si se encuentra un registro para la fecha de hoy, devolverlo
+            return Response({'id': registro_hoy.id, 'texto': registro_hoy.texto})
         else:
-            # Obtener el siguiente registro de la tabla
-            siguiente_registro = MiTabla.objects.filter(id__gt=ObtenerID.ultimo_id).order_by('id').first()
-            if siguiente_registro is None:
-                # Si no hay más registros disponibles, regresar al primer registro
-                primer_registro = MiTabla.objects.all().order_by('id').first()
-                ObtenerID.ultimo_id = primer_registro.id
-                texto = primer_registro.texto
-            else:
-                ObtenerID.ultimo_id = siguiente_registro.id
-                texto = siguiente_registro.texto
-                
-        return Response({'id': ObtenerID.ultimo_id, 'texto': texto})
-
+            # Si no se encuentra ningún registro para la fecha de hoy, devolver un código de error (por ejemplo, "1")
+            return Response({'error_code': '1'})
 # --------------------- Api --------------------- #

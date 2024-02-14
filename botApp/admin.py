@@ -107,9 +107,9 @@ class UsuarioTextoPreguntaAdmin(admin.ModelAdmin):
     list_filter = ("id", "Rut", "texto_pregunta", "fecha_pregunta")
     
 class MiTablaAdmin(admin.ModelAdmin):
-    list_display = ("id", "texto")
-    search_fields = ("id", "texto")
-    list_filter = ("id", "texto")
+    list_display = ("id", "texto", "fecha")
+    search_fields = ("id", "texto", "fecha")
+    list_filter = ("id", "texto", "fecha")
 
 
 admin.site.register(Usuario, UsuarioAdmin)
