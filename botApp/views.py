@@ -25,6 +25,9 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAdminUser
+
 
 from .forms import *
 from .models import *
@@ -656,22 +659,38 @@ def crearPregunta(request):
     return render(request, "preguntas/crearPreguntas.html", data)
 
 
+
 # --------------------- Api --------------------- #
 
-#Usuario
-class UsuarioViewSet(viewsets.ModelViewSet):
-    queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
-    
-#RespuestaUsuario
-class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
-    queryset = UsuarioRespuesta.objects.all()
-    serializer_class = UsuarioRespuestaSerializer
-    
-#TextoPreguntaUsuario
-class UsuarioTextoPreguntaViewSet(viewsets.ModelViewSet):
-    queryset = UsuarioTextoPregunta.objects.all()
-    serializer_class = UsuarioTextoPreguntaSerializer
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAdminUser
+
+def apiHome(request):
+    return render(request, "api/apiHome.html")
+
+class UsuarioRespuestaAPIView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAdminUser]
+    def get(self, request):
+        respuestas = UsuarioRespuesta.objects.all()
+        serializer = UsuarioRespuestaSerializer(respuestas, many=True)
+        return Response(serializer.data)
+
+class UsuarioTextoPreguntaAPIView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAdminUser]
+    def get(self, request):
+        textos_pregunta = UsuarioTextoPregunta.objects.all()
+        serializer = UsuarioTextoPreguntaSerializer(textos_pregunta, many=True)
+        return Response(serializer.data)
+
+class UsuarioAPIView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAdminUser]
+    def get(self, request):
+        usuarios = Usuario.objects.all()
+        serializer = UsuarioSerializer(usuarios, many=True)
+        return Response(serializer.data)
     
 class ObtenerID(APIView):
     def get(self, request):
