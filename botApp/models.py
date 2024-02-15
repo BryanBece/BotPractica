@@ -121,8 +121,9 @@ class UsuarioTextoPregunta(models.Model):
         return f"{self.Rut} - {self.texto_pregunta}"
 
 
-class MiTabla(models.Model):
+class MensajeContenido(models.Model):
     id = models.AutoField(primary_key=True, verbose_name="ID Texto")
     texto = models.CharField(max_length=200)
+    Genero_Usuario = models.ForeignKey(Genero, on_delete=models.CASCADE)
     fecha = models.DateField(verbose_name="Fecha")
 

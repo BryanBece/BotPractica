@@ -698,11 +698,11 @@ class ObtenerID(APIView):
         fecha_hoy = date.today()
         
         # Buscar un registro en la tabla que coincida con la fecha de hoy
-        registro_hoy = MiTabla.objects.filter(fecha=fecha_hoy).first()
+        registro_hoy = MensajeContenido.objects.filter(fecha=fecha_hoy).first()
         
         if registro_hoy:
             # Si se encuentra un registro para la fecha de hoy, devolverlo
-            return Response({'id': registro_hoy.id, 'texto': registro_hoy.texto})
+            return Response({'id': registro_hoy.id, 'texto': registro_hoy.texto, 'genero': registro_hoy.Genero_Usuario.OPC_Genero})
         else:
             # Si no se encuentra ningún registro para la fecha de hoy, devolver un código de error (por ejemplo, "1")
             return Response({'error_code': '1'})

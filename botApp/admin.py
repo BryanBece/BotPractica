@@ -106,10 +106,10 @@ class UsuarioTextoPreguntaAdmin(admin.ModelAdmin):
     search_fields = ("id", "Rut", "texto_pregunta", "fecha_pregunta")
     list_filter = ("id", "Rut", "texto_pregunta", "fecha_pregunta")
     
-class MiTablaAdmin(admin.ModelAdmin):
-    list_display = ("id", "texto", "fecha")
-    search_fields = ("id", "texto", "fecha")
-    list_filter = ("id", "texto", "fecha")
+class MensajeContenidoAdmin(admin.ModelAdmin):
+    list_display = ("id", "texto", "Genero_Usuario","fecha")
+    search_fields = ("id", "texto", "fecha", "Genero_Usuario")
+    list_filter = ("id", "texto", "fecha", "Genero_Usuario")
 
 
 admin.site.register(Usuario, UsuarioAdmin)
@@ -121,4 +121,4 @@ admin.site.register(Genero, GeneroAdmin)
 admin.site.register(SistemaSalud, SistemaSaludAdmin)
 admin.site.register(Ocupacion, OcupacionAdmin)
 admin.site.register(UsuarioTextoPregunta, UsuarioTextoPreguntaAdmin)
-admin.site.register(MiTabla, MiTablaAdmin)
+admin.site.register(MensajeContenido, MensajeContenidoAdmin)
