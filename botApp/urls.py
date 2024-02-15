@@ -27,7 +27,7 @@ urlpatterns = [
     path('descargar_excel/', views.descargar_excel, name='descargar_excel'),
 
     # API
-    path('apiHome', apiHome, name='apiHome'),
+    path('apiHome/', apiHome, name='apiHome'),
     path('obtener-id/', ObtenerID.as_view(), name='obtener_id'),    
     path('api_usuario/', UsuarioAPIView.as_view(), name='api_usuario'),
     path('api_pregunta/', UsuarioTextoPreguntaAPIView.as_view(), name='api_pregunta'),
