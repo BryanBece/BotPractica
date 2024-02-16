@@ -16,3 +16,8 @@ class UsuarioTextoPreguntaSerializer(serializers.ModelSerializer):
     class Meta:
         model = UsuarioTextoPregunta
         fields = "__all__"
+        
+class MensajeContenidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MensajeContenido
+        fields = "__all__"

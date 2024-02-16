@@ -29,6 +29,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAdminUser
 
 
+
 from .forms import *
 from .models import *
 from .serializer import *
@@ -244,8 +245,6 @@ def generar_grafico_personas_por_genero():
 
     imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     return imagen_base64
-
-
     
 def generar_grafico_ingresos_por_comuna():
     with connection.cursor() as cursor:
@@ -311,8 +310,6 @@ def generar_grafico_referencias():
     imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
     return imagen_base64
-
-
 
 def generar_grafico_pregunta1():
     with connection.cursor() as cursor:
@@ -661,9 +658,26 @@ def crearPregunta(request):
 
 
 # --------------------- Api --------------------- #
+#Usuario
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
 
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAdminUser
+#RespuestaUsuario
+class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
+    queryset = UsuarioRespuesta.objects.all()
+    serializer_class = UsuarioRespuestaSerializer
+
+#TextoPreguntaUsuario
+class UsuarioTextoPreguntaViewSet(viewsets.ModelViewSet):
+    queryset = UsuarioTextoPregunta.objects.all()
+    serializer_class = UsuarioTextoPreguntaSerializer
+    
+#MensajeContenido
+class MensajeContenidoViewSet(viewsets.ModelViewSet):
+    queryset = MensajeContenido.objects.all()
+    serializer_class = MensajeContenidoSerializer
+
 
 def apiHome(request):
     return render(request, "api/apiHome.html")
@@ -690,6 +704,14 @@ class UsuarioAPIView(APIView):
     def get(self, request):
         usuarios = Usuario.objects.all()
         serializer = UsuarioSerializer(usuarios, many=True)
+        return Response(serializer.data)
+    
+class MensajeContenidoAPIView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAdminUser]
+    def get(self, request):
+        mensajes = MensajeContenido.objects.all()
+        serializer = MensajeContenidoSerializer(mensajes, many=True)
         return Response(serializer.data)
     
 class ObtenerID(APIView):

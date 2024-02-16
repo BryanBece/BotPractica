@@ -127,3 +127,4 @@ class MensajeContenido(models.Model):
     Genero_Usuario = models.ForeignKey(Genero, on_delete=models.CASCADE)
     fecha = models.DateField(verbose_name="Fecha")
 
+
