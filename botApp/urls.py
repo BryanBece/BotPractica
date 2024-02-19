@@ -1,14 +1,8 @@
 from django.urls import path, include
 from . import views
-from rest_framework import routers
 from .views import *
 
 
-router = routers.DefaultRouter()
-router.register(r'Usuario', views.UsuarioViewSet)
-router.register(r'UsuarioRespuesta', views.UsuarioRespuestaViewSet)
-router.register(r'UsuarioTextoPregunta', views.UsuarioTextoPreguntaViewSet)
-router.register(r'MensajeContenido', views.MensajeContenidoViewSet)
 
 urlpatterns = [
     path('', views.login),
@@ -31,10 +25,14 @@ urlpatterns = [
 
     # Descargar Excel
     path('descargar_excel/', views.descargar_excel, name='descargar_excel'),
+    
+    # Mensajes
+    path('home_mensajes/', views.homeMensajes, name='mensajesHome'),
+    path('crearMensaje/', views.crearMensaje, name='crearMensaje'),
+    path('modificarMensaje/<id>/', views.modificarMensaje, name='modificarMensaje'),
+    path('eliminarMensaje/<id>/', views.eliminarMensaje, name='eliminarMensaje'),
 
     # API
-    path('api/v1/', include(router.urls)),
-    
     path('apiHome/', apiHome, name='apiHome'),
     path('obtener-id/', ObtenerID.as_view(), name='obtener_id'),    
     path('api_usuario/', UsuarioAPIView.as_view(), name='api_usuario'),

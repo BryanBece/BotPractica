@@ -21,12 +21,10 @@
         <li><a href="{% url 'reportes' %}">Reportes</a></li>
 		    <li><a href="{% url 'listarPreguntas' %}">Listado Preguntas</a></li>
 		    <li><a href="{% url 'crearPregunta' %}">Crear Preguntas</a></li>
-        <!--
         {% if user.is_staff %}
         <li><a href="{% url 'apiHome' %}">Api's</a></li>
+        <li><a href="{% url 'mensajesHome' %}">Listado Mensajes</a></li>
         {% endif %}
-        -->
-
       </ul>
     </nav>
     <form method="post" action="{% url 'logout' %}">

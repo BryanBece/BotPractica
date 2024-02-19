@@ -35,3 +35,11 @@ class PreguntaForm(forms.ModelForm):
     class Meta:
         model = Pregunta
         fields = ['pregunta']
+        
+class MensajeContenidoForm(forms.ModelForm):
+    class Meta:
+        model = MensajeContenido
+        fields = ['texto', 'Genero_Usuario', 'fecha']
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'dark-input'})
+        }

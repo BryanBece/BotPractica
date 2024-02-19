@@ -656,29 +656,56 @@ def crearPregunta(request):
     return render(request, "preguntas/crearPreguntas.html", data)
 
 
+# --------------------- Mensajes --------------------- #
+@login_required
+def homeMensajes(request):
+    Mensajes = MensajeContenido.objects.all()
+    data = {
+        "mensajes": Mensajes,
+    }
+    return render(request, "mensajes/homeMensajes.html", data)
+
+@login_required
+def crearMensaje(request):
+    data = {"form": MensajeContenidoForm()}
+
+    if request.method == "POST":
+        formulario = MensajeContenidoForm(data=request.POST, files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Mensaje Creado Correctamente")
+        else:
+            data["form"] = formulario
+
+    return render(request, "mensajes/crearMensajes.html", data)
+
+@login_required
+def modificarMensaje(request, id):
+    Mensajes = MensajeContenido.objects.get(id=id)
+    data = {"form": MensajeContenidoForm(instance=Mensajes)}
+
+    if request.method == "POST":
+        formulario = MensajeContenidoForm(
+            data=request.POST, instance=Mensajes, files=request.FILES
+        )
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "Modificado Correctamente")
+            return redirect(to="mensajesHome")
+        data["form"] = formulario
+
+    return render(request, "mensajes/modificarMensajes.html", data)
+
+@login_required
+def eliminarMensaje(request, id):
+    Mensajes = MensajeContenido.objects.get(id=id)
+    Mensajes.delete()
+    messages.success(request, "Eliminado Correctamente")
+    return redirect(to="mensajesHome")
 
 # --------------------- Api --------------------- #
-#Usuario
-class UsuarioViewSet(viewsets.ModelViewSet):
-    queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
 
-#RespuestaUsuario
-class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
-    queryset = UsuarioRespuesta.objects.all()
-    serializer_class = UsuarioRespuestaSerializer
-
-#TextoPreguntaUsuario
-class UsuarioTextoPreguntaViewSet(viewsets.ModelViewSet):
-    queryset = UsuarioTextoPregunta.objects.all()
-    serializer_class = UsuarioTextoPreguntaSerializer
-    
-#MensajeContenido
-class MensajeContenidoViewSet(viewsets.ModelViewSet):
-    queryset = MensajeContenido.objects.all()
-    serializer_class = MensajeContenidoSerializer
-
-
+@login_required
 def apiHome(request):
     return render(request, "api/apiHome.html")
 
