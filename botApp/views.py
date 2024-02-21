@@ -1,25 +1,21 @@
+import base64
+from datetime import datetime, date
+import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')
-
-from openpyxl import Workbook
-from datetime import datetime
 from io import BytesIO
-import base64
-import matplotlib.pyplot as plt
 import requests
-
 
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import connection
-from django.shortcuts import render, redirect
 from django.db.models import Count, F, Max
 from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.utils import timezone
-from datetime import date
 
-
+from openpyxl import Workbook
 
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -28,11 +24,10 @@ from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAdminUser
 
-
-
 from .forms import *
 from .models import *
 from .serializer import *
+
 
 
     
