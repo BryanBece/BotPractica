@@ -14,8 +14,8 @@
 *.backup
 
 # Directorios
-/__pycache__
-/node_modules
+__pycache__/
+node_modules/
 
 # Entornos virtuales de Python
 .venv
