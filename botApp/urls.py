@@ -2,7 +2,13 @@ from django.urls import path, include
 from . import views
 from .views import *
 
+from rest_framework import routers
 
+router = routers.DefaultRouter()
+router.register(r'Usuario', views.UsuarioViewSet)
+router.register(r'UsuarioRespuesta', views.UsuarioRespuestaViewSet)
+router.register(r'UsuarioTextoPregunta', views.UsuarioTextoPreguntaViewSet)
+router.register(r'MensajeContenido', views.MensajeContenidoViewSet)
 
 urlpatterns = [
     path('', views.home),
@@ -33,6 +39,7 @@ urlpatterns = [
     path('eliminarMensaje/<id>/', views.eliminarMensaje, name='eliminarMensaje'),
 
     # API
+    path('api/', include(router.urls)),
     path('apiHome/', apiHome, name='apiHome'),
     path('obtener-id/', ObtenerID.as_view(), name='obtener_id'),    
     path('api_usuario/', UsuarioAPIView.as_view(), name='api_usuario'),

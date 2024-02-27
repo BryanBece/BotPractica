@@ -704,6 +704,26 @@ def eliminarMensaje(request, id):
 def apiHome(request):
     return render(request, "api/apiHome.html")
 
+#Usuario
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+
+#RespuestaUsuario
+class UsuarioRespuestaViewSet(viewsets.ModelViewSet):
+    queryset = UsuarioRespuesta.objects.all()
+    serializer_class = UsuarioRespuestaSerializer
+
+#TextoPreguntaUsuario
+class UsuarioTextoPreguntaViewSet(viewsets.ModelViewSet):
+    queryset = UsuarioTextoPregunta.objects.all()
+    serializer_class = UsuarioTextoPreguntaSerializer
+    
+#MensajeContenido
+class MensajeContenidoViewSet(viewsets.ModelViewSet):
+    queryset = MensajeContenido.objects.all()
+    serializer_class = MensajeContenidoSerializer
+
 class UsuarioRespuestaAPIView(APIView):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAdminUser]
