@@ -172,6 +172,43 @@ def descargar_excel(request):
         response['Content-Disposition'] = f'attachment; filename={nombre_archivo}'
         return response
 # --------------------- Reporteria --------------------- #
+def generar_grafico_anios_nacimiento():
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT u.AnioNacimiento, COUNT(*) 
+            FROM botApp_usuariorespuesta ur 
+            INNER JOIN botApp_usuario u ON ur.Rut = u.Rut 
+            WHERE ur.id_opc_respuesta_id = 8 
+            GROUP BY u.AnioNacimiento
+        """)
+        resultados = cursor.fetchall()
+
+    anios = []
+    cantidades = []
+
+    for resultado in resultados:
+        anio_nacimiento, cantidad = resultado
+        anios.append(anio_nacimiento)
+        cantidades.append(cantidad)
+
+    # Crear gráfico de barras
+    plt.bar(anios, cantidades, color='skyblue')
+
+    # Agregar etiquetas
+    for i in range(len(anios)):
+        plt.text(anios[i], cantidades[i], str(cantidades[i]), ha='center', va='bottom')
+
+    plt.xlabel("Año de Nacimiento")
+    plt.ylabel("Número de Personas")
+    plt.title("Distribución de Años de Nacimiento")
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    plt.close()
+
+    imagen_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return imagen_base64
 
 def generar_grafico_respuestas_por_dia():
     with connection.cursor() as cursor:
@@ -546,7 +583,8 @@ def reportes(request):
         "imagen_base64_pregunta4": generar_grafico_pregunta4(),
         "imagen_base64_pregunta5": generar_grafico_pregunta5(),
         "imagen_base64_pregunta6": generar_grafico_pregunta6(),  
-        "imagen_base64_referencias": generar_grafico_referencias(),     
+        "imagen_base64_referencias": generar_grafico_referencias(), 
+        "imagen_base64_anios_nacimiento": generar_grafico_anios_nacimiento(),   
             }
     return render(request, "reportes.html", data)
 
