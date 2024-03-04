@@ -188,8 +188,9 @@ def generar_grafico_anios_nacimiento():
 
     for resultado in resultados:
         anio, cantidad = resultado
-        anios.append(int(anio))  # Convertir el año a entero
-        cantidades.append(cantidad)
+        if anio is not None:  # Verificar que el año no sea None
+            anios.append(int(anio))  # Convertir el año a entero
+            cantidades.append(cantidad)
 
     # Crear gráfico de barras
     plt.bar(anios, cantidades, color='skyblue')
