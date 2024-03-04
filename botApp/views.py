@@ -175,11 +175,11 @@ def descargar_excel(request):
 def generar_grafico_anios_nacimiento():
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT u.AnioNacimiento, COUNT(*) 
+            SELECT EXTRACT(YEAR FROM u.AnioNacimiento) AS Anio, COUNT(*) 
             FROM botApp_usuariorespuesta ur 
             INNER JOIN botApp_usuario u ON ur.Rut = u.Rut 
             WHERE ur.id_opc_respuesta_id = 8 
-            GROUP BY u.AnioNacimiento
+            GROUP BY Anio
         """)
         resultados = cursor.fetchall()
 
@@ -187,8 +187,8 @@ def generar_grafico_anios_nacimiento():
     cantidades = []
 
     for resultado in resultados:
-        anio_nacimiento, cantidad = resultado
-        anios.append(anio_nacimiento)
+        anio, cantidad = resultado
+        anios.append(anio)
         cantidades.append(cantidad)
 
     # Crear gráfico de barras
