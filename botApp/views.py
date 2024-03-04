@@ -188,7 +188,7 @@ def generar_grafico_anios_nacimiento():
 
     for resultado in resultados:
         anio, cantidad = resultado
-        anios.append(anio)
+        anios.append(int(anio))  # Convertir el año a entero
         cantidades.append(cantidad)
 
     # Crear gráfico de barras
