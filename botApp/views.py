@@ -177,11 +177,7 @@ def descargar_excel(request):
 def generar_grafico_anio_nacimiento():
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT SUBSTRING_INDEX(Usuario.AnioNacimiento, '-', -1), COUNT(*) "
-            "FROM Usuario "
-            "INNER JOIN UsuarioRespuesta ON Usuario.Rut = UsuarioRespuesta.Rut "
-            "WHERE UsuarioRespuesta.id_opc_respuesta_id = 8 "
-            "GROUP BY SUBSTRING_INDEX(Usuario.AnioNacimiento, '-', -1)"
+            "SELECT SUBSTRING_INDEX(AnioNacimiento, '-', -1), COUNT(*) FROM botApp_usuario GROUP BY SUBSTRING_INDEX(AnioNacimiento, '-', -1)"
         )
         resultados = cursor.fetchall()
 
@@ -196,7 +192,7 @@ def generar_grafico_anio_nacimiento():
     plt.bar(anios, cantidades, color="blue")
     plt.xlabel("Año de Nacimiento")
     plt.ylabel("Número de Usuarios")
-    plt.title("Usuarios por Año de Nacimiento (Respondieron con id_opc_respuesta 8)")
+    plt.title("Usuarios por Año de Nacimiento")
 
     # Agregar etiquetas en las barras
     for anio, cantidad in zip(anios, cantidades):
